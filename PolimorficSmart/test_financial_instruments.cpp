@@ -1,4 +1,5 @@
 #include "financial_instrument.h"
+#include "portfolio_market.h"
 #include <gtest/gtest.h>
 #include <memory>
 #include <vector>

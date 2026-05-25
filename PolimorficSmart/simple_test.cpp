@@ -1,12 +1,8 @@
 #include "financial_instrument.h"
+#include "portfolio_market.h"
 #include <iostream>
 #include <cassert>
 #include <memory>
-
-// Factory function declaration (from main.cpp)
-std::unique_ptr<FinancialInstrument> createInstrument(const std::string& type, 
-                                                      const std::string& symbol, 
-                                                      double price);
 
 // Simple test framework
 #define TEST_ASSERT(condition, message) \
@@ -181,22 +177,6 @@ bool test_factory_function() {
     TEST_ASSERT(invalid.get() == nullptr, "Factory returns nullptr for invalid type");
     
     return true;
-}
-
-// Factory function implementation (from main.cpp)
-std::unique_ptr<FinancialInstrument> createInstrument(const std::string& type, 
-                                                      const std::string& symbol, 
-                                                      double price) {
-    if (type == "stock") {
-        return std::make_unique<Stock>(symbol, price, 100);
-    } else if (type == "bond") {
-        return std::make_unique<Bond>(symbol, price, 5.0, 10);
-    } else if (type == "call") {
-        return std::make_unique<Option>(symbol, price, Option::Type::CALL, 150.0, 10);
-    } else if (type == "put") {
-        return std::make_unique<Option>(symbol, price, Option::Type::PUT, 100.0, 10);
-    }
-    return nullptr;
 }
 
 int main() {

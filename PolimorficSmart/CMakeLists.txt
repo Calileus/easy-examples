@@ -8,11 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Try to find GTest, but make it optional for now
 find_package(GTest QUIET)
 
+set(FINANCIAL_SHARED_SOURCES
+    portfolio_market.cpp
+)
+
 # Add executable for main example
-add_executable(financial_example main.cpp)
+add_executable(financial_example main.cpp ${FINANCIAL_SHARED_SOURCES})
 
 # Add simple test executable (always available)
-add_executable(simple_test simple_test.cpp)
+add_executable(simple_test simple_test.cpp ${FINANCIAL_SHARED_SOURCES})
 
 # Add threaded example executable
 add_executable(threaded_example threaded_main.cpp)
@@ -22,7 +26,7 @@ add_executable(threaded_tests threaded_tests.cpp)
 
 # Add test executable (only if GTest is found)
 if(GTest_FOUND)
-    add_executable(financial_tests test_financial_instruments.cpp)
+    add_executable(financial_tests test_financial_instruments.cpp ${FINANCIAL_SHARED_SOURCES})
     target_link_libraries(financial_tests GTest::gtest GTest::gtest_main)
     
     # Enable testing
