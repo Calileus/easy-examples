@@ -1,0 +1,3 @@
+#include "resource.h"  // Include resource definitions
+
+IDR_MAINFRAME ICON "icon.ico"  // Define an icon resource
