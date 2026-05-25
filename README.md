@@ -8,6 +8,7 @@ A collection of practical C++ examples demonstrating modern language features, W
 EasyExamples/
 ├── PolimorficSmart/              # Advanced C++ with polymorphism & smart pointers
 ├── ModernCPP_Containers/         # STL containers, algorithms, and file I/O
+├── ExceptionHandling/            # Custom exceptions and error recovery
 ├── WindowsHEasiest/              # Minimal Windows GUI example
 ├── WindowsDialog/                # Dialog boxes with input validation
 ├── WindowsAndCommctrlH/          # Windows with common controls
@@ -30,17 +31,18 @@ Here the examples are ordered from easiest to most advanced:
 2. `VsCodeCmakeW2src`
 3. `WindowsHEasiest`
 4. `ModernCPP_Containers`
-5. `WindowsAndCommctrlH`
-6. `WindowsDialog`
-7. `Gdiplus_H`
-8. `ResourcesAndGdiplus_H`
-9. `ResourcesProgressBar`
-10. `WindowsDrawing`
-11. `PolimorficSmart`
+5. `ExceptionHandling`
+6. `WindowsAndCommctrlH`
+7. `WindowsDialog`
+8. `Gdiplus_H`
+9. `ResourcesAndGdiplus_H`
+10. `ResourcesProgressBar`
+11. `WindowsDrawing`
+12. `PolimorficSmart`
 
 ## Examples Summary
 
-### 🏆 PolimorficSmart
+### PolimorficSmart
 
 **Location:** `PolimorficSmart/`
 
@@ -88,7 +90,48 @@ cmake --build .
 
 ---
 
-### 📚 ModernCPP_Containers
+### ExceptionHandling
+
+**Location:** `ExceptionHandling/`
+
+Comprehensive guide to exception handling with custom exceptions, error recovery, and exception safety guarantees.
+
+**Key Features:**
+- **Custom Exception Classes**: Inheriting from std::exception
+- **Try/Catch Blocks**: Multiple catch blocks for different exception types
+- **Exception Propagation**: Passing exceptions through function call stacks
+- **RAII with Exceptions**: Exception-safe resource management
+- **Exception Safety Guarantees**: Strong, basic, and no-throw guarantees
+- **Catch Order**: Matching specific exceptions before generic ones
+- **Transaction Rollback**: Undoing operations on failure
+- **Practical Error Recovery**: Real-world error handling patterns
+
+**Key Files:**
+- `src/main.cpp` - Bank account system demonstrating exception handling patterns
+- `CMakeLists.txt` - C++17 project configuration with exception flags
+
+**Demonstrates:**
+✓ Custom exception class design  
+✓ Try/catch/throw mechanics  
+✓ Multiple exception types  
+✓ Exception propagation and stack unwinding  
+✓ Exception safety guarantees  
+✓ RAII with exception cleanup  
+✓ Transaction safety and rollback  
+✓ Real-world error scenarios  
+
+**Build & Run:**
+```bash
+cd ExceptionHandling
+mkdir build && cd build
+cmake -S .. -B .
+cmake --build .
+./Debug/exception_example
+```
+
+---
+
+### ModernCPP_Containers
 
 **Location:** `ModernCPP_Containers/`
 
@@ -129,7 +172,7 @@ cmake --build .
 
 ---
 
-### 🪟 WindowsHEasiest
+### WindowsHEasiest
 
 **Location:** `WindowsHEasiest/`
 
@@ -156,7 +199,7 @@ cmake --build .
 
 ---
 
-### 🎛️ WindowsDialog
+### WindowsDialog
 
 **Location:** `WindowsDialog/`
 
@@ -196,7 +239,7 @@ cmake --build .
 
 ---
 
-### 🎛️ WindowsAndCommctrlH
+### WindowsAndCommctrlH
 
 **Location:** `WindowsAndCommctrlH/`
 
@@ -223,7 +266,7 @@ cmake --build .
 
 ---
 
-### 🎨 WindowsDrawing
+### WindowsDrawing
 
 **Location:** `WindowsDrawing/`
 
@@ -263,7 +306,7 @@ cmake --build .
 
 ---
 
-### 🎨 Gdiplus_H
+### Gdiplus_H
 
 **Location:** `Gdiplus_H/`
 
@@ -290,7 +333,7 @@ cmake --build .
 
 ---
 
-### 📦 ResourcesAndGdiplus_H
+### ResourcesAndGdiplus_H
 
 **Location:** `ResourcesAndGdiplus_H/`
 
@@ -321,7 +364,7 @@ cmake --build .
 
 ---
 
-### 📊 ResourcesProgressBar
+### ResourcesProgressBar
 
 **Location:** `ResourcesProgressBar/`
 
@@ -353,7 +396,7 @@ cmake --build .
 
 ---
 
-### 🔨 VsCodeCmakeEasiest
+### VsCodeCmakeEasiest
 
 **Location:** `VsCodeCmakeEasiest/`
 
@@ -380,7 +423,7 @@ cmake --build .
 
 ---
 
-### 📁 VsCodeCmakeW2src
+### VsCodeCmakeW2src
 
 **Location:** `VsCodeCmakeW2src/`
 
@@ -487,10 +530,11 @@ doxygen Doxyfile
 4. Study `ModernCPP_Containers` - STL basics and practical usage
 
 **Intermediate:**
-1. Explore `WindowsDialog` - interactive controls and validation
-2. Study `WindowsAndCommctrlH` - Windows common controls
-3. Learn `Gdiplus_H` - graphics programming basics
-4. Try `WindowsDrawing` - interactive graphics with mouse handling
+1. Learn `ExceptionHandling` - error handling and recovery patterns
+2. Explore `WindowsDialog` - interactive controls and validation
+3. Study `WindowsAndCommctrlH` - Windows common controls
+4. Learn `Gdiplus_H` - graphics programming basics
+5. Try `WindowsDrawing` - interactive graphics with mouse handling
 
 **Advanced:**
 1. Deep dive into `PolimorficSmart/main.cpp` - smart pointer patterns
@@ -511,6 +555,10 @@ doxygen Doxyfile
 | **Algorithms & Lambdas** | ModernCPP_Containers |
 | **File I/O** | ModernCPP_Containers |
 | **String Manipulation** | ModernCPP_Containers |
+| **Exception Handling** | ExceptionHandling |
+| **Custom Exceptions** | ExceptionHandling |
+| **Error Recovery** | ExceptionHandling |
+| **Exception Safety** | ExceptionHandling |
 | **CMake Basics** | VsCodeCmakeEasiest |
 | **Multi-file Projects** | VsCodeCmakeW2src |
 | **Windows GUI** | WindowsHEasiest |
