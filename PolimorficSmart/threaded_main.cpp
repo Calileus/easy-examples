@@ -1,3 +1,15 @@
+/// \file threaded_main.cpp
+/// \brief Advanced C++ threading demonstrations with smart pointers.
+///
+/// Demonstrates:
+/// - **Thread-safe operations** with shared_ptr in multithreaded contexts.
+/// - **Async operations** using std::async and std::future.
+/// - **Producer-consumer pattern** with condition variables.
+/// - **Market simulation** with multiple concurrent worker threads.
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "threaded_market.h"
 #include <iostream>
 #include <vector>

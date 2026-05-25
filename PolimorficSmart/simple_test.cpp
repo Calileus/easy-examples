@@ -1,10 +1,22 @@
+/// \file simple_test.cpp
+/// \brief Unit tests for financial instruments using a custom test framework.
+///
+/// Tests basic functionality of Stock, Bond, and Option classes including
+/// value calculation, risk calculation, and polymorphic behavior.
+/// Uses a simple custom test framework (TEST_ASSERT macro) instead of external libraries.
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "financial_instrument.h"
 #include "portfolio_market.h"
 #include <iostream>
 #include <cassert>
 #include <memory>
 
-// Simple test framework
+/// \brief Simple assertion macro for testing.
+/// \param condition Expression to test.
+/// \param message Message to print on success or failure.
 #define TEST_ASSERT(condition, message) \
     do { \
         if (!(condition)) { \
@@ -16,6 +28,7 @@
     } while(0)
 
 bool test_stock_calculations() {
+    /// \brief Test Stock class value and risk calculations.
     std::cout << "\n=== Testing Stock Calculations ===" << std::endl;
     
     auto stock = std::make_unique<Stock>("AAPL", 150.0, 100);

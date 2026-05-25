@@ -1,3 +1,15 @@
+/// \file main.cpp
+/// \brief Demonstrates C++ polymorphism and smart pointer usage with financial instruments.
+///
+/// This example shows:
+/// - **Polymorphism**: Virtual functions and inheritance with Stock, Bond, and Option classes.
+/// - **Smart Pointers**: unique_ptr, shared_ptr, and weak_ptr memory management.
+/// - **Design Patterns**: Factory pattern for object creation and observer pattern with weak_ptr.
+/// - **RAII**: Automatic resource cleanup through smart pointers.
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "financial_instrument.h"
 #include "portfolio_market.h"
 #include <vector>
@@ -5,6 +17,10 @@
 #include <iostream>
 
 // Demonstrate polymorphism with smart pointers
+/// \brief Demonstrates runtime polymorphism with unique_ptr containers.
+///
+/// Creates different instrument types in a vector and calls virtual functions
+/// to show that each derived class executes its own method implementation.
 void demonstratePolymorphism() {
     std::cout << "\n=== Polymorphism Demonstration ===" << std::endl;
     
@@ -23,6 +39,10 @@ void demonstratePolymorphism() {
 }
 
 // Demonstrate shared_ptr usage
+/// \brief Demonstrates shared ownership with shared_ptr and reference counting.
+///
+/// Creates multiple portfolios that share ownership of the same instruments,
+/// showing how reference counts increase and decrease.
 void demonstrateSharedPtr() {
     std::cout << "\n=== Shared Pointer Demonstration ===" << std::endl;
     
@@ -47,6 +67,10 @@ void demonstrateSharedPtr() {
 }
 
 // Demonstrate weak_ptr usage
+/// \brief Demonstrates non-owning weak_ptr references and expiration detection.
+///
+/// Creates weak_ptr instances and demonstrates locking and expiration
+/// when the underlying shared_ptr is destroyed.
 void demonstrateWeakPtr() {
     std::cout << "\n=== Weak Pointer Demonstration ===" << std::endl;
     
@@ -79,6 +103,10 @@ void demonstrateWeakPtr() {
 }
 
 // Demonstrate move semantics with unique_ptr
+/// \brief Demonstrates move semantics for efficient ownership transfer with unique_ptr.
+///
+/// Shows how move semantics allow efficient transfer of ownership between unique_ptr instances
+/// without copying or allocating new memory.
 void demonstrateMoveSemantics() {
     std::cout << "\n=== Move Semantics Demonstration ===" << std::endl;
     
@@ -98,6 +126,10 @@ void demonstrateMoveSemantics() {
 }
 
 int main() {
+    /// \brief Entry point demonstrating all key C++ concepts.
+    ///
+    /// Runs through demonstrations of polymorphism, shared/unique/weak pointers,
+    /// move semantics, and a complete market simulation scenario.
     std::cout << "=== C++ Polymorphism and Smart Pointers Example ===" << std::endl;
     std::cout << "Financial Instruments for Quant Dev Interview" << std::endl;
     

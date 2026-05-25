@@ -1,10 +1,29 @@
+/// \file main.cpp
+/// \brief Windows GUI demonstrating a progress bar control.
+///
+/// Shows how to create a window with a progress bar control that updates
+/// over time using a timer. Demonstrates common controls usage patterns.
+///
+/// \author Easy Examples
+/// \version 1.0
+
 #include <windows.h>
 #include <commctrl.h>
 #include "../resource.h"
 
-#define IDC_PROGRESS 1001
-#define IDT_PROGRESS_TIMER 2001
+#define IDC_PROGRESS 1001  ///< Progress control ID.
+#define IDT_PROGRESS_TIMER 2001  ///< Timer ID for progress updates.
 
+/// \brief Window message handler for progress bar window.
+///
+/// Handles window creation, timer events for progress updates, and
+/// destruction events.
+///
+/// \param hwnd Window handle.
+/// \param uMsg Message identifier.
+/// \param wParam Message-specific word parameter.
+/// \param lParam Message-specific long parameter.
+/// \return Message-dependent result.
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     static HWND hProgress = nullptr;
     static int progressValue = 0;
@@ -49,6 +68,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd) {
+    /// \brief Entry point for progress bar demonstration application.
+    ///
+    /// Creates a window class, registers it, creates the window with a
+    /// progress bar control, and runs the message loop.
+    ///
+    /// \param hInstance Application instance handle.
+    /// \param nShowCmd Initial window show state.
+    /// \return Exit code from message loop.
     INITCOMMONCONTROLSEX icex;
     icex.dwSize = sizeof(icex);
     icex.dwICC = ICC_PROGRESS_CLASS;

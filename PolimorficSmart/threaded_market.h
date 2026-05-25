@@ -17,19 +17,28 @@
 #include <sstream>
 #include <algorithm>
 
-// Thread-safe logger for market events
+/// \brief Thread-safe singleton logger for concurrent console output.
+///
+/// Ensures that log messages from multiple threads are properly synchronized
+/// and timestamped without interleaving.
 class ThreadSafeLogger {
 public:
+    /// \brief Get the singleton logger instance.
+    /// \return Reference to the thread-safe logger.
     static ThreadSafeLogger& getInstance() {
         static ThreadSafeLogger instance;
         return instance;
     }
     
+    /// \brief Log a message without thread ID.
+    /// \param message The message to log with timestamp.
     void log(const std::string& message) {
         std::lock_guard<std::mutex> lock(mutex_);
         std::cout << "[" << getCurrentTimestamp() << "] " << message << std::endl;
     }
     
+    /// \brief Log a message with the current thread ID.
+    /// \param message The message to log with timestamp and thread ID.
     void logWithThread(const std::string& message) {
         std::lock_guard<std::mutex> lock(mutex_);
         std::cout << "[" << getCurrentTimestamp() << "][Thread-" 
@@ -59,20 +68,32 @@ private:
 };
 
 // Thread-safe price update event
+/// \brief Represents a price update event in the market.
 struct PriceUpdate {
-    std::string symbol;
-    double new_price;
-    std::chrono::system_clock::time_point timestamp;
+    std::string symbol;  ///< The symbol of the instrument updated.
+    double new_price;  ///< The new price value.
+    std::chrono::system_clock::time_point timestamp;  ///< When the update occurred.
     
+    /// \brief Construct a price update.
+    /// \param sym The instrument symbol.
+    /// \param price The new price.
     PriceUpdate(const std::string& sym, double price)
         : symbol(sym), new_price(price), timestamp(std::chrono::system_clock::now()) {}
 };
 
 // Thread-safe portfolio class
+/// \brief Thread-safe wrapper around Portfolio for concurrent access.
+///
+/// Protects instrument collection with mutex to prevent race conditions
+/// when adding instruments and updating prices from multiple threads.
 class ThreadSafePortfolio {
 public:
+    /// \brief Construct a thread-safe portfolio.
+    /// \param name Display name of the portfolio.
     ThreadSafePortfolio(const std::string& name) : name_(name) {}
     
+    /// \brief Add an instrument to the portfolio (thread-safe).
+    /// \param instrument Shared pointer to the instrument.
     void addInstrument(std::shared_ptr<FinancialInstrument> instrument) {
         std::lock_guard<std::mutex> lock(mutex_);
         instruments_.push_back(instrument);
@@ -150,10 +171,16 @@ private:
 };
 
 // Thread-safe market data feed
+/// \brief Thread-safe market data feed with price update queue.
+///
+/// Generates random price updates and notifies all subscribers (portfolios)
+/// of price changes through a producer-consumer pattern with a condition variable.
 class MarketDataFeed {
 public:
+    /// \brief Construct the market data feed.
     MarketDataFeed() : running_(false) {}
     
+    /// \brief Start the data feed.
     void start() {
         running_ = true;
         logger_.logWithThread("Market data feed started");
@@ -243,8 +270,13 @@ private:
 };
 
 // Market simulation orchestrator
+/// \brief Orchestrates a complete market simulation with multiple worker threads.
+///
+/// Manages price update threads, monitoring threads, and portfolio calculation threads
+/// to simulate a realistic market environment.
 class MarketSimulation {
 public:
+    /// \brief Construct the market simulation.
     MarketSimulation() : running_(false) {}
     
     void addPortfolio(std::shared_ptr<ThreadSafePortfolio> portfolio) {
