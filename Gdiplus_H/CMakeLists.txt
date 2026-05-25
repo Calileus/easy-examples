@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add the executable, specifying the source file
-add_executable(MyexeWindowsProject src/main.cpp)
+add_executable(MyexeWindowsProject WIN32 src/main.cpp)
 
 # Link against Windows libraries
 target_link_libraries(

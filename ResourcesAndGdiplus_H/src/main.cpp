@@ -1,15 +1,12 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <gdiplus.h>
-#include <iostream>
 #include "../resource.h"  // Include the resource header
-
-#pragma comment(lib, "gdiplus.lib")
 
 using namespace Gdiplus;
 
 // Entry point for the program
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
     // Initialize GDI+
     GdiplusStartupInput gdiplusStartupInput;
     ULONG_PTR gdiplusToken;
@@ -30,6 +27,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Cleanup GDI+
     GdiplusShutdown(gdiplusToken);
-    std::cout << "This is a console output." << std::endl;
     return 0;
 }

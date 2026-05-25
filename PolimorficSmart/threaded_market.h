@@ -44,9 +44,15 @@ private:
         auto time_t = std::chrono::system_clock::to_time_t(now);
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
             now.time_since_epoch()) % 1000;
+        std::tm local_tm{};
+    #if defined(_WIN32)
+        localtime_s(&local_tm, &time_t);
+    #else
+        localtime_r(&time_t, &local_tm);
+    #endif
         
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&time_t), "%H:%M:%S");
+        ss << std::put_time(&local_tm, "%H:%M:%S");
         ss << "." << std::setfill('0') << std::setw(3) << ms.count();
         return ss.str();
     }
@@ -117,16 +123,22 @@ public:
     
     void printPortfolio() const {
         std::lock_guard<std::mutex> lock(mutex_);
+        double total_value = 0.0;
+        double total_risk = 0.0;
         logger_.log("=== Portfolio: " + name_ + " ===");
         for (const auto& instrument : instruments_) {
+            const double value = instrument->calculateValue();
+            const double risk = instrument->calculateRisk();
+            total_value += value;
+            total_risk += risk;
             std::stringstream ss;
             ss << "  " << instrument->getType() << ": " << instrument->getSymbol() 
                << ", Price: $" << instrument->getPrice() 
-               << ", Value: $" << instrument->calculateValue();
+               << ", Value: $" << value;
             logger_.log(ss.str());
         }
-        logger_.log("Total Value: $" + std::to_string(calculateTotalValue()));
-        logger_.log("Total Risk: $" + std::to_string(calculateTotalRisk()));
+        logger_.log("Total Value: $" + std::to_string(total_value));
+        logger_.log("Total Risk: $" + std::to_string(total_risk));
         logger_.log("========================");
     }
 
@@ -177,27 +189,30 @@ public:
         new_price = std::max(0.01, new_price);
         
         PriceUpdate update(symbol, new_price);
-        
-        // Notify all subscribers
-        std::lock_guard<std::mutex> lock(mutex_);
-        for (auto it = subscribers_.begin(); it != subscribers_.end();) {
+
+        std::vector<std::shared_ptr<ThreadSafePortfolio>> active_subscribers;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            for (auto it = subscribers_.begin(); it != subscribers_.end();) {
             if (auto portfolio = it->lock()) {
-                portfolio->updateInstrumentPrice(symbol, new_price);
+                active_subscribers.push_back(portfolio);
                 ++it;
             } else {
-                // Remove expired weak_ptr
                 it = subscribers_.erase(it);
             }
         }
+        }
+
+        for (const auto& portfolio : active_subscribers) {
+            portfolio->updateInstrumentPrice(symbol, new_price);
+        }
         
-        // Add to update queue for monitoring
         {
             std::lock_guard<std::mutex> queue_lock(queue_mutex_);
             update_queue_.push(update);
         }
         queue_cv_.notify_one();
-        
-        // Store last price
+
         {
             std::lock_guard<std::mutex> lock(mutex_);
             last_prices_[symbol] = new_price;

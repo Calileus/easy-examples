@@ -1,35 +1,93 @@
 #include <windows.h>
 #include <commctrl.h>
-#include <gdiplus.h>
-#include <iostream>
-#include "../resource.h"  // Include the resource header
+#include "../resource.h"
 
-#pragma comment(lib, "gdiplus.lib")
+#define IDC_PROGRESS 1001
+#define IDT_PROGRESS_TIMER 2001
 
-using namespace Gdiplus;
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    static HWND hProgress = nullptr;
+    static int progressValue = 0;
 
-// Entry point for the program
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
-    // Initialize GDI+
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
+    switch (uMsg) {
+    case WM_CREATE:
+        hProgress = CreateWindowEx(
+            0,
+            PROGRESS_CLASS,
+            nullptr,
+            WS_CHILD | WS_VISIBLE,
+            20, 30, 340, 30,
+            hwnd,
+            reinterpret_cast<HMENU>(IDC_PROGRESS),
+            reinterpret_cast<LPCREATESTRUCT>(lParam)->hInstance,
+            nullptr);
 
-    // Initialize common controls
-    INITCOMMONCONTROLSEX icex;
-    icex.dwSize = sizeof(icex);
-    icex.dwICC = ICC_WIN95_CLASSES;
-    InitCommonControlsEx(&icex);
+        SendMessage(hProgress, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
+        SendMessage(hProgress, PBM_SETSTEP, 1, 0);
+        SetTimer(hwnd, IDT_PROGRESS_TIMER, 40, nullptr);
+        return 0;
 
-    // Load the icon from resources
-    HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDR_MAINFRAME));
-    if (hIcon) {
-        MessageBox(NULL, "Hello, Windows with Resources!", "Greetings", MB_OK | MB_ICONINFORMATION);
-        DestroyIcon(hIcon);
+    case WM_TIMER:
+        if (wParam == IDT_PROGRESS_TIMER) {
+            if (progressValue < 100) {
+                ++progressValue;
+                SendMessage(hProgress, PBM_SETPOS, progressValue, 0);
+            } else {
+                KillTimer(hwnd, IDT_PROGRESS_TIMER);
+                MessageBox(hwnd, "Progress complete!", "ResourcesProgressBar", MB_OK | MB_ICONINFORMATION);
+            }
+        }
+        return 0;
+
+    case WM_DESTROY:
+        KillTimer(hwnd, IDT_PROGRESS_TIMER);
+        PostQuitMessage(0);
+        return 0;
     }
 
-    // Cleanup GDI+
-    GdiplusShutdown(gdiplusToken);
-    std::cout << "This is a console output." << std::endl;
-    return 0;
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd) {
+    INITCOMMONCONTROLSEX icex;
+    icex.dwSize = sizeof(icex);
+    icex.dwICC = ICC_PROGRESS_CLASS;
+    InitCommonControlsEx(&icex);
+
+    const char CLASS_NAME[] = "ResourcesProgressBarWindow";
+
+    WNDCLASS wc = {};
+    wc.lpfnWndProc = WindowProc;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = CLASS_NAME;
+    wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDR_MAINFRAME));
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+
+    RegisterClass(&wc);
+
+    HWND hwnd = CreateWindowEx(
+        0,
+        CLASS_NAME,
+        "Resources + Progress Bar",
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 150,
+        nullptr,
+        nullptr,
+        hInstance,
+        nullptr);
+
+    if (!hwnd) {
+        return 0;
+    }
+
+    ShowWindow(hwnd, nShowCmd);
+
+    MSG msg = {};
+    while (GetMessage(&msg, nullptr, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
+    return static_cast<int>(msg.wParam);
 }
