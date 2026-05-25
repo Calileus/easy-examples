@@ -1,0 +1,4 @@
+// Resource definitions for WindowsDialog example
+
+// Icon resource (stub)
+IDR_MAINFRAME ICON "icon.ico"
