@@ -1,3 +1,22 @@
+/// \file test_financial_instruments.cpp
+/// \brief Google Test (GTest) unit tests for financial instruments.
+///
+/// Comprehensive test suite using Google Test framework for:
+/// - Stock, Bond, and Option value and risk calculations
+/// - Polymorphic behavior of instrument types
+/// - Smart pointer usage patterns (unique_ptr, shared_ptr, weak_ptr)
+/// - Factory function behavior
+/// - Portfolio aggregation
+/// - Edge cases (zero values, negative prices, large numbers)
+/// - Virtual destructor proper cleanup
+/// - Polymorphic container operations
+///
+/// This test file requires Google Test (GTest) library to be installed.
+/// Run with: ./financial_tests or cmake --build . --target run_tests
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "financial_instrument.h"
 #include "portfolio_market.h"
 #include <gtest/gtest.h>
@@ -6,6 +25,9 @@
 #include <stdexcept>
 
 // Test basic polymorphism
+/// \brief GTest fixture for testing basic financial instrument functionality.
+/// 
+/// Provides setup of Stock, Bond, and Option instances for use in multiple tests.
 class FinancialInstrumentTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -146,6 +168,10 @@ TEST(SmartPointerTest, WeakPtrUsage) {
 }
 
 // Test factory function
+/// \brief GTest function to verify factory pattern implementation.
+///
+/// Tests that createInstrument correctly creates different instrument types
+/// and returns nullptr for invalid types.
 TEST(FactoryTest, CreateInstruments) {
     auto stock = createInstrument("stock", "TSLA", 800.0);
     auto bond = createInstrument("bond", "CORP", 950.0);
@@ -173,6 +199,9 @@ TEST(FactoryTest, CreateInstruments) {
 }
 
 // Test Portfolio class
+/// \brief GTest fixture for testing Portfolio functionality.
+///
+/// Sets up test portfolios and instruments for portfolio aggregation tests.
 class PortfolioTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -212,6 +241,9 @@ TEST_F(PortfolioTest, SharedOwnership) {
 }
 
 // Test edge cases
+/// \brief GTest functions to verify handling of edge case values.
+///
+/// Tests instruments with zero and negative values to ensure robust calculations.
 TEST(EdgeCasesTest, ZeroValues) {
     auto stock = std::make_unique<Stock>("ZERO", 0.0, 0);
     auto bond = std::make_unique<Bond>("ZERO", 0.0, 0.0, 0);
@@ -238,6 +270,10 @@ TEST(EdgeCasesTest, LargeNumbers) {
 }
 
 // Test virtual destructor behavior
+/// \brief GTest function to verify proper cleanup of derived class instances.
+///
+/// Tests that virtual destructors are correctly called for derived classes
+/// through base class pointers, preventing resource leaks.
 TEST(VirtualDestructorTest, ProperCleanup) {
     bool destroyed = false;
     
@@ -266,6 +302,10 @@ TEST(VirtualDestructorTest, ProperCleanup) {
 }
 
 // Test polymorphic container operations
+/// \brief GTest function to verify polymorphic behavior in containers.
+///
+/// Tests that different instrument types in a single container correctly
+/// execute their own virtual method implementations.
 TEST(PolymorphicContainerTest, MixedContainerOperations) {
     std::vector<std::unique_ptr<FinancialInstrument>> instruments;
     

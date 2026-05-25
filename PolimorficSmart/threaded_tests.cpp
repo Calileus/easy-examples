@@ -1,3 +1,22 @@
+/// \file threaded_tests.cpp
+/// \brief Unit tests for threading and concurrent smart pointer usage.
+///
+/// Tests thread-safe operations including:
+/// - Thread-safe logger with mutex protection
+/// - Concurrent portfolio modification from multiple threads
+/// - Market data feed with producer-consumer pattern
+/// - Async operations with futures
+/// - Polymorphic operations across threads
+/// - Weak pointer behavior in multithreaded context
+/// - Market simulation with multiple worker threads
+/// - Shared pointer thread safety
+/// - Condition variables for synchronization
+///
+/// Uses a simple custom TEST_ASSERT macro for testing without external dependencies.
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "threaded_market.h"
 #include <iostream>
 #include <cassert>
@@ -6,7 +25,10 @@
 #include <chrono>
 #include <atomic>
 
-// Simple test framework
+/// \brief Simple assertion macro for testing.
+/// Prints "PASS" or "FAIL" and returns false on failure, preventing further test execution.
+/// \param condition Expression to test.
+/// \param message Message describing the assertion.
 #define TEST_ASSERT(condition, message) \
     do { \
         if (!(condition)) { \
@@ -18,6 +40,15 @@
     } while(0)
 
 // Factory function implementation
+/// \brief Factory function for creating financial instruments by type.
+/// 
+/// Creates different instrument types without exposing the concrete classes
+/// to the test code. Supports "stock", "bond", "call", and "put" types.
+///
+/// \param type String identifying instrument type.
+/// \param symbol Instrument symbol/identifier.
+/// \param price Initial price for the instrument.
+/// \return Unique pointer to created instrument, or nullptr if type is invalid.
 std::unique_ptr<FinancialInstrument> createInstrument(const std::string& type, 
                                                       const std::string& symbol, 
                                                       double price) {

@@ -1,7 +1,18 @@
+/// \file portfolio_market.cpp
+/// \brief Implementation of Portfolio and Market classes.
+///
+/// This file contains the implementation of shared portfolio and market
+/// management functionality extracted from main.cpp for code reuse across
+/// examples and tests.
+///
+/// \author Quantitative Finance Example
+/// \version 1.0
+
 #include "portfolio_market.h"
 
 #include <iostream>
 
+/// \brief Construct an empty portfolio with a given name.
 Portfolio::Portfolio(const std::string& name) : name_(name) {}
 
 void Portfolio::addInstrument(std::shared_ptr<FinancialInstrument> instrument) {

@@ -1,3 +1,10 @@
+// \file resource.rc
+// \brief Windows resource definition file.
+//
+// Defines application resources (icons, bitmaps, strings, etc.) that are
+// compiled into the executable. This file is processed by the resource compiler (rc.exe).
+
 #include "resource.h"  // Include resource definitions
 
+/// Icon resource definition for the main application frame.
 IDR_MAINFRAME ICON "icon.ico"  // Define an icon resource
