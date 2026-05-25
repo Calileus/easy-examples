@@ -161,6 +161,7 @@ public:
     
     void stop() {
         running_ = false;
+        queue_cv_.notify_all();
         logger_.logWithThread("Market data feed stopped");
     }
     

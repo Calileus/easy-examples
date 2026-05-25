@@ -164,7 +164,7 @@ bool test_polymorphic_threading() {
     
     // Create threads for each instrument type
     for (auto& instrument : instruments) {
-        threads.emplace_back([&instrument, &completed_operations]() {
+        threads.emplace_back([&instrument, &completed_operations]() -> bool {
             // Test polymorphic behavior in thread
             std::string type = instrument->getType();
             double value = instrument->calculateValue();
@@ -175,6 +175,7 @@ bool test_polymorphic_threading() {
             TEST_ASSERT(risk >= 0, "Risk calculated correctly in thread");
             
             completed_operations++;
+            return true;
         });
     }
     
@@ -196,12 +197,13 @@ bool test_weak_ptr_threading() {
     std::atomic<bool> weak_ptr_worked{false};
     
     // Thread using weak_ptr
-    std::thread weak_thread([&weak_portfolio, &weak_ptr_worked]() {
+    std::thread weak_thread([&weak_portfolio, &weak_ptr_worked]() -> bool {
         if (auto locked = weak_portfolio.lock()) {
             double value = locked->calculateTotalValue();
             TEST_ASSERT(value > 0, "Weak pointer locked successfully");
             weak_ptr_worked = true;
         }
+        return true;
     });
     
     weak_thread.join();
@@ -211,9 +213,10 @@ bool test_weak_ptr_threading() {
     // Test expired weak_ptr
     portfolio.reset();
     
-    std::thread expired_thread([&weak_portfolio]() {
+    std::thread expired_thread([&weak_portfolio]() -> bool {
         auto locked = weak_portfolio.lock();
         TEST_ASSERT(locked.get() == nullptr, "Weak pointer correctly reports expired");
+        return true;
     });
     
     expired_thread.join();
@@ -250,7 +253,7 @@ bool test_shared_ptr_thread_safety() {
     
     // Multiple threads sharing the same instrument
     for (int i = 0; i < 10; ++i) {
-        threads.emplace_back([instrument, &operations, i]() {
+        threads.emplace_back([instrument, &operations, i]() -> bool {
             // Test shared access
             double price = instrument->getPrice();
             double value = instrument->calculateValue();
@@ -261,6 +264,7 @@ bool test_shared_ptr_thread_safety() {
             TEST_ASSERT(!type.empty(), "Type accessible from thread");
             
             operations++;
+            return true;
         });
     }
     
@@ -286,8 +290,9 @@ bool test_unique_ptr_move_semantics() {
     TEST_ASSERT(shared.get() != nullptr, "Shared pointer contains moved object");
     
     // Use in thread
-    std::thread thread([shared]() {
+    std::thread thread([shared]() -> bool {
         TEST_ASSERT(shared->getSymbol() == "UNIQUE", "Moved object accessible in thread");
+        return true;
     });
     
     thread.join();
@@ -314,9 +319,9 @@ bool test_condition_variable_usage() {
     });
     
     // Consumer thread
-    std::thread consumer([&feed, &producer_done, &consumer_done]() {
+    std::thread consumer([&feed, &consumer_done]() -> bool {
         int count = 0;
-        while (!producer_done.load() || count < 5) {
+        while (count < 5) {
             PriceUpdate update("", 0.0);
             if (feed.getNextUpdate(update)) {
                 count++;
@@ -324,6 +329,7 @@ bool test_condition_variable_usage() {
             }
         }
         consumer_done = true;
+        return true;
     });
     
     producer.join();
