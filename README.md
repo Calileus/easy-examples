@@ -22,6 +22,22 @@ EasyExamples/
 
 ---
 
+## Difficulty Order (Numbered)
+
+Here the examples are ordered from easiest to most advanced:
+
+1. `VsCodeCmakeEasiest`
+2. `VsCodeCmakeW2src`
+3. `WindowsHEasiest`
+4. `ModernCPP_Containers`
+5. `WindowsAndCommctrlH`
+6. `WindowsDialog`
+7. `Gdiplus_H`
+8. `ResourcesAndGdiplus_H`
+9. `ResourcesProgressBar`
+10. `WindowsDrawing`
+11. `PolimorficSmart`
+
 ## Examples Summary
 
 ### 🏆 PolimorficSmart
