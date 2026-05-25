@@ -7,8 +7,11 @@ A collection of practical C++ examples demonstrating modern language features, W
 ```
 EasyExamples/
 ├── PolimorficSmart/              # Advanced C++ with polymorphism & smart pointers
+├── ModernCPP_Containers/         # STL containers, algorithms, and file I/O
 ├── WindowsHEasiest/              # Minimal Windows GUI example
+├── WindowsDialog/                # Dialog boxes with input validation
 ├── WindowsAndCommctrlH/          # Windows with common controls
+├── WindowsDrawing/               # Graphics drawing and mouse interaction
 ├── Gdiplus_H/                    # Windows GUI with GDI+ graphics
 ├── ResourcesAndGdiplus_H/        # Resources + GDI+ integration
 ├── ResourcesProgressBar/         # Progress bar control example
@@ -69,6 +72,47 @@ cmake --build .
 
 ---
 
+### 📚 ModernCPP_Containers
+
+**Location:** `ModernCPP_Containers/`
+
+Comprehensive guide to STL containers, algorithms, and modern C++ features using practical examples.
+
+**Key Features:**
+- **Vector Operations**: Sorting, filtering, and aggregation
+- **Map Containers**: Efficient key-value lookups
+- **Set Operations**: Unique value management
+- **String Manipulation**: Trimming, splitting, parsing
+- **File I/O**: Reading and writing text files
+- **Lambda Expressions**: Functional programming with STL
+- **Range-based For Loops**: Clean iteration syntax
+- **Structured Bindings**: C++17 feature demonstration
+- **Algorithms**: std::sort, std::find, std::transform, std::accumulate
+
+**Key Files:**
+- `main.cpp` - Demonstrations of all STL features
+- `CMakeLists.txt` - C++17 project configuration
+
+**Demonstrates:**
+✓ STL container types (vector, map, set)  
+✓ Algorithms and functional operations  
+✓ Lambda expressions and captures  
+✓ File I/O with formatted output  
+✓ String manipulation and parsing  
+✓ C++17 structured bindings  
+✓ Iterator patterns  
+
+**Build & Run:**
+```bash
+cd ModernCPP_Containers
+mkdir build && cd build
+cmake -S .. -B .
+cmake --build .
+./Debug/containers_example
+```
+
+---
+
 ### 🪟 WindowsHEasiest
 
 **Location:** `WindowsHEasiest/`
@@ -96,6 +140,46 @@ cmake --build .
 
 ---
 
+### 🎛️ WindowsDialog
+
+**Location:** `WindowsDialog/`
+
+Demonstrates dialog-like windows with input controls, validation, and event handling.
+
+**Key Features:**
+- **Edit Controls**: Text input fields
+- **Button Controls**: Click event handling
+- **Static Text**: Display messages
+- **Input Validation**: Age and name validation logic
+- **Message Boxes**: User feedback dialogs
+- **Window Message Handling**: WM_COMMAND, WM_CREATE, WM_DESTROY
+- **Helper Functions**: Extracting and setting control text
+
+**Key Files:**
+- `src/main.cpp` - Dialog window with controls
+- `CMakeLists.txt` - Windows subsystem configuration
+- `src/resource.rc` - Resource file template
+
+**Demonstrates:**
+✓ Creating child window controls  
+✓ Button click event handling  
+✓ Edit control text retrieval  
+✓ Input validation patterns  
+✓ Message boxes for user feedback  
+✓ Control management  
+✓ Window procedure message routing  
+
+**Build & Run:**
+```bash
+cd WindowsDialog
+mkdir build && cd build
+cmake -S .. -B .
+cmake --build .
+./Debug/dialog_example.exe
+```
+
+---
+
 ### 🎛️ WindowsAndCommctrlH
 
 **Location:** `WindowsAndCommctrlH/`
@@ -119,6 +203,46 @@ mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
 ./Debug/MyWindowsProject.exe
+```
+
+---
+
+### 🎨 WindowsDrawing
+
+**Location:** `WindowsDrawing/`
+
+Interactive drawing application with GDI+ graphics, shape manipulation, and animation.
+
+**Key Features:**
+- **GDI+ Graphics**: Drawing circles, ellipses, and lines
+- **Mouse Interaction**: Click-to-select and drag-to-move shapes
+- **Animation**: Timer-driven shape rotation
+- **Color Management**: Multiple colored shapes
+- **Double-Buffering**: Smooth rendering without flicker
+- **Shape Selection**: Visual feedback with highlighting
+- **Real-time Rendering**: WM_PAINT message handling
+
+**Key Files:**
+- `src/main.cpp` - Drawing window with graphics and input handling
+- `CMakeLists.txt` - GDI+ linking configuration
+
+**Demonstrates:**
+✓ GDI+ graphics initialization and cleanup  
+✓ Drawing shapes (circles, lines)  
+✓ Color and pen styling  
+✓ Mouse event handling (down, move, up)  
+✓ Hit detection for shape selection  
+✓ Timer-based animation  
+✓ Window class with member function callback  
+✓ Double-buffering rendering pattern  
+
+**Build & Run:**
+```bash
+cd WindowsDrawing
+mkdir build && cd build
+cmake -S .. -B .
+cmake --build .
+./Debug/drawing_example.exe
 ```
 
 ---
@@ -344,17 +468,19 @@ doxygen Doxyfile
 1. Start with `VsCodeCmakeEasiest` - understand basic project setup
 2. Move to `VsCodeCmakeW2src` - learn modular organization
 3. Try `WindowsHEasiest` - first Windows GUI program
+4. Study `ModernCPP_Containers` - STL basics and practical usage
 
 **Intermediate:**
-1. Study `WindowsAndCommctrlH` - Windows common controls
-2. Explore `Gdiplus_H` - graphics programming
-3. Learn `ResourcesAndGdiplus_H` - resource management
+1. Explore `WindowsDialog` - interactive controls and validation
+2. Study `WindowsAndCommctrlH` - Windows common controls
+3. Learn `Gdiplus_H` - graphics programming basics
+4. Try `WindowsDrawing` - interactive graphics with mouse handling
 
 **Advanced:**
 1. Deep dive into `PolimorficSmart/main.cpp` - smart pointer patterns
 2. Study `PolimorficSmart/simple_test.cpp` - testing approach
 3. Explore `PolimorficSmart/threaded_main.cpp` - concurrency patterns
-4. Run `PolimorficSmart/financial_tests` - GTest framework
+4. Combine multiple concepts in custom projects
 
 ---
 
@@ -365,11 +491,19 @@ doxygen Doxyfile
 | **Polymorphism** | PolimorficSmart |
 | **Smart Pointers** | PolimorficSmart |
 | **Factory Pattern** | PolimorficSmart |
+| **STL Containers** | ModernCPP_Containers |
+| **Algorithms & Lambdas** | ModernCPP_Containers |
+| **File I/O** | ModernCPP_Containers |
+| **String Manipulation** | ModernCPP_Containers |
 | **CMake Basics** | VsCodeCmakeEasiest |
 | **Multi-file Projects** | VsCodeCmakeW2src |
 | **Windows GUI** | WindowsHEasiest |
+| **Dialog Controls** | WindowsDialog |
+| **Input Validation** | WindowsDialog |
 | **Common Controls** | WindowsAndCommctrlH |
-| **Graphics (GDI+)** | Gdiplus_H |
+| **Graphics (GDI+)** | WindowsDrawing, Gdiplus_H |
+| **Mouse Input** | WindowsDrawing |
+| **Animation** | WindowsDrawing |
 | **Resources** | ResourcesAndGdiplus_H |
 | **Progress Bar** | ResourcesProgressBar |
 | **Threading** | PolimorficSmart (threaded_main.cpp) |
