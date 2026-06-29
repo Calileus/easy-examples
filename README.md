@@ -455,6 +455,22 @@ cmake --build .
 
 ## Building All Examples
 
+### Repository-Wide Build (Recommended)
+
+Use the root CMake project to configure and build all examples consistently:
+
+```bash
+cmake -S . -B build
+cmake --build build --config Debug
+```
+
+To disable Win32 GUI examples and build console examples only:
+
+```bash
+cmake -S . -B build -DBUILD_WINDOWS_EXAMPLES=OFF
+cmake --build build --config Debug
+```
+
 ### Prerequisites
 
 - **C++ Compiler**: MSVC 2019+, GCC, or Clang with C++11+ support

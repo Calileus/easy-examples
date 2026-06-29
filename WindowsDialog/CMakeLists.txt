@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add executable with WIN32 subsystem for GUI
-add_executable(dialog_example WIN32 src/main.cpp src/resource.rc)
+add_executable(dialog_example WIN32 src/main.cpp)
 
 # Link Windows libraries
 target_link_libraries(dialog_example

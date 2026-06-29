@@ -25,6 +25,7 @@
 #include <iomanip>
 #include <sstream>
 #include <numeric>
+#include <iterator>
 
 /// \brief Structure representing a student record.
 struct Student {
@@ -70,9 +71,10 @@ void demonstrateVectors() {
         std::cout << "  " << student.name << ": " << student.grade << std::endl;
     }
     
-    // Find student with grade above 90
-    auto highAchievers = students | 
-        std::views::filter([](const Student& s) { return s.grade >= 90.0; });
+    // Find students with grade above 90
+    std::vector<Student> highAchievers;
+    std::copy_if(students.begin(), students.end(), std::back_inserter(highAchievers),
+        [](const Student& s) { return s.grade >= 90.0; });
     
     std::cout << "\nHigh achievers (grade >= 90):" << std::endl;
     for (const auto& student : highAchievers) {

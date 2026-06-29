@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Set the project name
-project(MyWindowsProject)
+project(ResourcesAndGdiplus_H)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add the executable, specifying the source file
-add_executable(MyWindowsProject WIN32 src/main.cpp resource.rc)
+add_executable(resources_and_gdiplus WIN32 src/main.cpp resource.rc)
 
 # Link against Windows libraries
-target_link_libraries(MyWindowsProject 
+target_link_libraries(resources_and_gdiplus 
     user32 
     comctl32 
     gdi32 

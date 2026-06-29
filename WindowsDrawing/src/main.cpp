@@ -13,6 +13,7 @@
 /// \version 1.0
 
 #include <windows.h>
+#include <windowsx.h>
 #include <gdiplus.h>
 #include <vector>
 #include <cmath>
@@ -237,10 +238,6 @@ private:
         return DefWindowProcA(hwnd, uMsg, wParam, lParam);
     }
 };
-
-// Macro for getting X and Y from lParam (mouse message)
-#define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-#define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 
 /// \brief Entry point for drawing application.
 /// \param hInstance Current instance handle.
