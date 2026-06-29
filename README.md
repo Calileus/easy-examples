@@ -464,6 +464,12 @@ cmake -S . -B build
 cmake --build build --config Debug
 ```
 
+Run tests discovered by CTest:
+
+```bash
+ctest --test-dir build -C Debug --output-on-failure
+```
+
 To disable Win32 GUI examples and build console examples only:
 
 ```bash
@@ -631,3 +637,10 @@ Improvements and additional examples are welcome! When contributing:
 - Include working CMakeLists.txt
 - Test on both MSVC and GCC/Clang
 - Follow existing code style
+
+See governance and engineering process docs:
+
+- `CONTRIBUTING.md`
+- `SECURITY.md`
+- `docs/RELEASE_CHECKLIST.md`
+- `.github/CODEOWNERS`

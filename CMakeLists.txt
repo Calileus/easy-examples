@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 project(EasyExamples)
 
+include(CTest)
+
 option(BUILD_WINDOWS_EXAMPLES "Build Win32 GUI examples" ON)
 option(BUILD_CONSOLE_EXAMPLES "Build console examples" ON)
 

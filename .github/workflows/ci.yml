@@ -7,23 +7,27 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
     steps:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DBUILD_TESTING=ON
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config ${{ matrix.config }}
 
-      - name: Run PolimorficSmart simple tests
+      - name: Validate test discovery
         shell: pwsh
         run: |
-          $exe = Join-Path (Resolve-Path build/PolimorficSmart/Release) simple_test.exe
-          & $exe
+          $listing = ctest --test-dir build -C ${{ matrix.config }} -N
+          $listing
+          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
+            throw 'No tests were discovered by CTest.'
+          }
 
-      - name: Run PolimorficSmart threaded tests
-        shell: pwsh
-        run: |
-          $exe = Join-Path (Resolve-Path build/PolimorficSmart/Release) threaded_tests.exe
-          & $exe
+      - name: Run tests
+        run: ctest --test-dir build -C ${{ matrix.config }} --output-on-failure
