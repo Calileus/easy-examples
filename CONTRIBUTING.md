@@ -15,6 +15,14 @@ cmake --build build --config Debug
 ctest --test-dir build -C Debug --output-on-failure
 ```
 
+## Strict Warnings Gate (Optional Local Repro)
+
+```bash
+cmake -S PolimorficSmart -B build_strict -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON
+cmake --build build_strict --config Debug
+ctest --test-dir build_strict -C Debug --output-on-failure
+```
+
 ## Contribution Workflow
 
 1. Keep changes small and focused.

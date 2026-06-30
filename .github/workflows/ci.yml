@@ -31,3 +31,26 @@ jobs:
 
       - name: Run tests
         run: ctest --test-dir build -C ${{ matrix.config }} --output-on-failure
+
+  strict-warnings-polimorficsmart:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure strict warnings
+        run: cmake -S PolimorficSmart -B build_strict -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON
+
+      - name: Build strict warnings
+        run: cmake --build build_strict --config Debug
+
+      - name: Validate strict test discovery
+        shell: pwsh
+        run: |
+          $listing = ctest --test-dir build_strict -C Debug -N
+          $listing
+          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
+            throw 'No tests were discovered by CTest in strict warnings job.'
+          }
+
+      - name: Run strict tests
+        run: ctest --test-dir build_strict -C Debug --output-on-failure
