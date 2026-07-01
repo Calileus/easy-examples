@@ -5,6 +5,14 @@ include(CTest)
 
 option(BUILD_WINDOWS_EXAMPLES "Build Win32 GUI examples" ON)
 option(BUILD_CONSOLE_EXAMPLES "Build console examples" ON)
+option(EASYEXAMPLES_STRICT_WARNINGS "Enable strict warnings mode for selected modules" OFF)
+option(EASYEXAMPLES_STRICT_WARNINGS_POLIMORFICSMART "Apply strict warnings mode to PolimorficSmart" ON)
+
+if(EASYEXAMPLES_STRICT_WARNINGS AND EASYEXAMPLES_STRICT_WARNINGS_POLIMORFICSMART)
+    set(POLIMORFICSMART_STRICT_WARNINGS ON)
+else()
+    set(POLIMORFICSMART_STRICT_WARNINGS OFF)
+endif()
 
 if(BUILD_CONSOLE_EXAMPLES)
     add_subdirectory(VsCodeCmakeEasiest)

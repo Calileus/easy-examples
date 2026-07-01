@@ -23,6 +23,14 @@ cmake --build build_strict --config Debug
 ctest --test-dir build_strict -C Debug --output-on-failure
 ```
 
+Root-level strict warnings (selected modules only):
+
+```bash
+cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+cmake --build build_strict_root --config Debug
+ctest --test-dir build_strict_root -C Debug --output-on-failure
+```
+
 ## Contribution Workflow
 
 1. Keep changes small and focused.

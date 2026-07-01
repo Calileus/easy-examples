@@ -54,3 +54,26 @@ jobs:
 
       - name: Run strict tests
         run: ctest --test-dir build_strict -C Debug --output-on-failure
+
+  strict-warnings-root-selected:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure strict warnings from root (selected modules)
+        run: cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+
+      - name: Build strict warnings from root
+        run: cmake --build build_strict_root --config Debug
+
+      - name: Validate strict root test discovery
+        shell: pwsh
+        run: |
+          $listing = ctest --test-dir build_strict_root -C Debug -N
+          $listing
+          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
+            throw 'No tests were discovered by CTest in strict root warnings job.'
+          }
+
+      - name: Run strict root tests
+        run: ctest --test-dir build_strict_root -C Debug --output-on-failure
