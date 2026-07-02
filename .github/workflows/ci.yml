@@ -77,3 +77,34 @@ jobs:
 
       - name: Run strict root tests
         run: ctest --test-dir build_strict_root -C Debug --output-on-failure
+
+  strict-warnings-selector-isolation:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        disabled_selector:
+          - EASYEXAMPLES_STRICT_WARNINGS_MODERNCPP_CONTAINERS
+          - EASYEXAMPLES_STRICT_WARNINGS_EXCEPTION_HANDLING
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure strict warnings with one selector disabled
+        shell: pwsh
+        run: |
+          cmake -S . -B build_strict_isolation -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON -DBUILD_WINDOWS_EXAMPLES=OFF "-D${{ matrix.disabled_selector }}=OFF"
+
+      - name: Build strict warnings with one selector disabled
+        run: cmake --build build_strict_isolation --config Debug
+
+      - name: Validate isolation test discovery
+        shell: pwsh
+        run: |
+          $listing = ctest --test-dir build_strict_isolation -C Debug -N
+          $listing
+          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
+            throw 'No tests were discovered by CTest in strict selector isolation job.'
+          }
+
+      - name: Run isolation tests
+        run: ctest --test-dir build_strict_isolation -C Debug --output-on-failure
