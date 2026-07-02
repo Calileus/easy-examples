@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project(ModernCPP_Containers)
 
+option(EASYEXAMPLES_STRICT_WARNINGS "Treat warnings as errors for quality gates" OFF)
+
+if(DEFINED MODERNCPP_CONTAINERS_STRICT_WARNINGS)
+    set(EASYEXAMPLES_STRICT_WARNINGS ${MODERNCPP_CONTAINERS_STRICT_WARNINGS})
+endif()
+
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -11,9 +17,17 @@ add_executable(containers_example main.cpp)
 
 # Compiler-specific options
 if(MSVC)
-    target_compile_options(containers_example PRIVATE /W4)
+    set(CONTAINERS_WARNING_FLAGS /W4)
+    if(EASYEXAMPLES_STRICT_WARNINGS)
+        list(APPEND CONTAINERS_WARNING_FLAGS /WX)
+    endif()
+    target_compile_options(containers_example PRIVATE ${CONTAINERS_WARNING_FLAGS})
 else()
-    target_compile_options(containers_example PRIVATE -Wall -Wextra -pedantic)
+    set(CONTAINERS_WARNING_FLAGS -Wall -Wextra -pedantic)
+    if(EASYEXAMPLES_STRICT_WARNINGS)
+        list(APPEND CONTAINERS_WARNING_FLAGS -Werror)
+    endif()
+    target_compile_options(containers_example PRIVATE ${CONTAINERS_WARNING_FLAGS})
 endif()
 
 # Set output directory
