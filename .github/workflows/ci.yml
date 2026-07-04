@@ -37,6 +37,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Strict config summary
+        shell: pwsh
+        run: |
+          @"
+          ## Strict warnings - PolimorficSmart
+          - Scope: PolimorficSmart only
+          - EASYEXAMPLES_STRICT_WARNINGS=ON
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+
       - name: Configure strict warnings
         run: cmake -S PolimorficSmart -B build_strict -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON
 
@@ -59,6 +68,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Strict config summary
+        shell: pwsh
+        run: |
+          @"
+          ## Strict warnings - Root selected
+          - EASYEXAMPLES_STRICT_WARNINGS=ON
+          - BUILD_WINDOWS_EXAMPLES=OFF
+          - PolimorficSmart selector=ON
+          - ModernCPP_Containers selector=ON
+          - ExceptionHandling selector=ON
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Configure strict warnings from root (selected modules)
         run: cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON -DBUILD_WINDOWS_EXAMPLES=OFF
@@ -88,6 +109,16 @@ jobs:
           - EASYEXAMPLES_STRICT_WARNINGS_EXCEPTION_HANDLING
     steps:
       - uses: actions/checkout@v4
+
+      - name: Isolation config summary
+        shell: pwsh
+        run: |
+          @"
+          ## Strict warnings - Selector isolation
+          - EASYEXAMPLES_STRICT_WARNINGS=ON
+          - BUILD_WINDOWS_EXAMPLES=OFF
+          - Disabled selector: ${{ matrix.disabled_selector }}
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Configure strict warnings with one selector disabled
         shell: pwsh
