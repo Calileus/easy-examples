@@ -617,6 +617,24 @@ doxygen Doxyfile
 - Install Google Test: `vcpkg install gtest` or use package manager
 - Optional - PolimorficSmart builds without GTest (skips test_financial_instruments.cpp)
 
+### CI Build or Test Failure
+- Open the failed GitHub Actions run and download the diagnostics artifact for that job.
+- Artifact names start with `diagnostics-` and include the failing matrix leg/job.
+- Artifacts include CTest temporary logs, `Test.xml`, and CMake configure logs.
+- Use the same configure flags locally to reproduce (examples):
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --config Debug
+ctest --test-dir build -C Debug --output-on-failure
+```
+
+```bash
+cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNINGS=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+cmake --build build_strict_root --config Debug
+ctest --test-dir build_strict_root -C Debug --output-on-failure
+```
+
 ---
 
 ## Project Information

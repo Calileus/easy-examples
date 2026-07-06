@@ -32,6 +32,18 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build -C ${{ matrix.config }} --output-on-failure
 
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-build-${{ matrix.config }}
+          if-no-files-found: ignore
+          path: |
+            build/Testing/Temporary/**
+            build/**/Test.xml
+            build/CMakeFiles/CMakeOutput.log
+            build/CMakeFiles/CMakeError.log
+
   strict-warnings-polimorficsmart:
     runs-on: windows-latest
     steps:
@@ -63,6 +75,18 @@ jobs:
 
       - name: Run strict tests
         run: ctest --test-dir build_strict -C Debug --output-on-failure
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-strict-polimorficsmart
+          if-no-files-found: ignore
+          path: |
+            build_strict/Testing/Temporary/**
+            build_strict/**/Test.xml
+            build_strict/CMakeFiles/CMakeOutput.log
+            build_strict/CMakeFiles/CMakeError.log
 
   strict-warnings-root-selected:
     runs-on: windows-latest
@@ -98,6 +122,18 @@ jobs:
 
       - name: Run strict root tests
         run: ctest --test-dir build_strict_root -C Debug --output-on-failure
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-strict-root-selected
+          if-no-files-found: ignore
+          path: |
+            build_strict_root/Testing/Temporary/**
+            build_strict_root/**/Test.xml
+            build_strict_root/CMakeFiles/CMakeOutput.log
+            build_strict_root/CMakeFiles/CMakeError.log
 
   strict-warnings-selector-isolation:
     runs-on: windows-latest
@@ -139,3 +175,15 @@ jobs:
 
       - name: Run isolation tests
         run: ctest --test-dir build_strict_isolation -C Debug --output-on-failure
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-strict-isolation-${{ matrix.disabled_selector }}
+          if-no-files-found: ignore
+          path: |
+            build_strict_isolation/Testing/Temporary/**
+            build_strict_isolation/**/Test.xml
+            build_strict_isolation/CMakeFiles/CMakeOutput.log
+            build_strict_isolation/CMakeFiles/CMakeError.log
