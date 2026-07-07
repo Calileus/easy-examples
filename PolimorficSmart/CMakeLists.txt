@@ -16,21 +16,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Try to find GTest, but make it optional for now
 find_package(GTest QUIET)
 
-set(FINANCIAL_SHARED_SOURCES
+set(FINANCIAL_CORE_SOURCES
     portfolio_market.cpp
 )
 
+add_library(financial_core STATIC ${FINANCIAL_CORE_SOURCES})
+target_include_directories(financial_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 # Add executable for main example
-add_executable(financial_example main.cpp ${FINANCIAL_SHARED_SOURCES})
+add_executable(financial_example main.cpp)
+target_link_libraries(financial_example PRIVATE financial_core)
 
 # Add simple test executable (always available)
-add_executable(simple_test simple_test.cpp ${FINANCIAL_SHARED_SOURCES})
+add_executable(simple_test simple_test.cpp)
+target_link_libraries(simple_test PRIVATE financial_core)
 
 # Add threaded example executable
-add_executable(threaded_example threaded_main.cpp ${FINANCIAL_SHARED_SOURCES})
+add_executable(threaded_example threaded_main.cpp)
+target_link_libraries(threaded_example PRIVATE financial_core)
 
 # Add threaded test executable
-add_executable(threaded_tests threaded_tests.cpp ${FINANCIAL_SHARED_SOURCES})
+add_executable(threaded_tests threaded_tests.cpp)
+target_link_libraries(threaded_tests PRIVATE financial_core)
 
 if(BUILD_TESTING)
     add_test(NAME financial_simple_test COMMAND simple_test)
@@ -39,8 +46,8 @@ endif()
 
 # Add test executable (only if GTest is found)
 if(GTest_FOUND)
-    add_executable(financial_tests test_financial_instruments.cpp ${FINANCIAL_SHARED_SOURCES})
-    target_link_libraries(financial_tests GTest::gtest GTest::gtest_main)
+    add_executable(financial_tests test_financial_instruments.cpp)
+    target_link_libraries(financial_tests financial_core GTest::gtest GTest::gtest_main)
 
     if(BUILD_TESTING)
         add_test(NAME financial_gtest_suite COMMAND financial_tests)
@@ -62,6 +69,7 @@ if(MSVC)
         list(APPEND FINANCIAL_WARNING_FLAGS /WX)
     endif()
 
+    target_compile_options(financial_core PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(financial_example PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(simple_test PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(threaded_example PRIVATE ${FINANCIAL_WARNING_FLAGS})
@@ -75,6 +83,7 @@ else()
         list(APPEND FINANCIAL_WARNING_FLAGS -Werror)
     endif()
 
+    target_compile_options(financial_core PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(financial_example PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(simple_test PRIVATE ${FINANCIAL_WARNING_FLAGS})
     target_compile_options(threaded_example PRIVATE ${FINANCIAL_WARNING_FLAGS})

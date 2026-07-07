@@ -44,9 +44,6 @@ PolimorficSmart/
 ## Building the Project
 
 ### Prerequisites
-- C++17 compatible compiler
-- CMake 3.14 or higher
-- Google Test (GTest) library (optional - for advanced tests)
 
 ### Build Instructions
 
@@ -70,6 +67,12 @@ cmake --build .
 # Run GTest tests (if GTest is available)
 ./financial_tests
 ```
+
+### Build Architecture Note
+
+The CMake build now uses a reusable static library target (`financial_core`) for shared domain logic (`portfolio_market.cpp`).
+All executables/tests (`financial_example`, `simple_test`, `threaded_example`, `threaded_tests`, and optional `financial_tests`) link against this target.
+This reduces source duplication and keeps shared logic centralized for maintenance.
 
 ### Alternative Build Commands
 

@@ -15,11 +15,16 @@ cmake --build build --config Debug
 ctest --test-dir build -C Debug --output-on-failure
 ```
 
-Validate test discovery count (root build currently expects at least 6 tests):
+Validate test discovery count:
 
 ```bash
 ctest --test-dir build -C Debug -N
 ```
+
+Current CI-aligned minimums:
+
+- Root Windows build (`BUILD_WINDOWS_EXAMPLES=ON`): at least 7 tests
+- Root strict console-only build (`BUILD_WINDOWS_EXAMPLES=OFF`): at least 6 tests
 
 ## Strict Warnings Gate (Optional Local Repro)
 
@@ -66,7 +71,7 @@ cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNING
 
 - [ ] Builds from repository root.
 - [ ] `ctest` passes in at least one configuration.
-- [ ] `ctest -N` from root reports at least 6 discovered tests.
+- [ ] `ctest -N` from root reports at least 7 discovered tests.
 - [ ] Documentation updated if needed.
 - [ ] No unrelated generated artifacts committed.
 
