@@ -27,10 +27,10 @@ add_executable(financial_example main.cpp ${FINANCIAL_SHARED_SOURCES})
 add_executable(simple_test simple_test.cpp ${FINANCIAL_SHARED_SOURCES})
 
 # Add threaded example executable
-add_executable(threaded_example threaded_main.cpp)
+add_executable(threaded_example threaded_main.cpp ${FINANCIAL_SHARED_SOURCES})
 
 # Add threaded test executable
-add_executable(threaded_tests threaded_tests.cpp)
+add_executable(threaded_tests threaded_tests.cpp ${FINANCIAL_SHARED_SOURCES})
 
 if(BUILD_TESTING)
     add_test(NAME financial_simple_test COMMAND simple_test)

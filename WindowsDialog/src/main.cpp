@@ -15,6 +15,7 @@
 #include <windows.h>
 #include <sstream>
 #include <string>
+#include "input_validation.h"
 
 #define IDC_EDIT_NAME 1001      ///< Edit control ID for name input.
 #define IDC_EDIT_AGE 1002       ///< Edit control ID for age input.
@@ -59,14 +60,8 @@ void ValidateAndDisplay(HWND hwnd) {
     
     // Validate age
     int age = 0;
-    try {
-        age = std::stoi(ageStr);
-        if (age < 0 || age > 150) {
-            MessageBoxA(hwnd, "Age must be between 0 and 150.", "Validation Error", MB_OK | MB_ICONWARNING);
-            return;
-        }
-    } catch (...) {
-        MessageBoxA(hwnd, "Age must be a valid number.", "Validation Error", MB_OK | MB_ICONWARNING);
+    if (!TryParseValidatedAge(ageStr, age)) {
+        MessageBoxA(hwnd, "Age must be a valid number between 0 and 150.", "Validation Error", MB_OK | MB_ICONWARNING);
         return;
     }
     

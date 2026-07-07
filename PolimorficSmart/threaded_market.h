@@ -444,13 +444,13 @@ namespace AsyncUtils {
     }
     
     std::future<double> asyncCalculatePortfolioValue(std::shared_ptr<ThreadSafePortfolio> portfolio) {
-        return asyncExecute([&portfolio]() {
+        return asyncExecute([portfolio]() {
             return portfolio->calculateTotalValue();
         });
     }
     
     std::future<double> asyncCalculatePortfolioRisk(std::shared_ptr<ThreadSafePortfolio> portfolio) {
-        return asyncExecute([&portfolio]() {
+        return asyncExecute([portfolio]() {
             return portfolio->calculateTotalRisk();
         });
     }

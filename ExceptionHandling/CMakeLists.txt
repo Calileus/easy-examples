@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(ExceptionHandling)
+
+include(CTest)
 
 option(EASYEXAMPLES_STRICT_WARNINGS "Treat warnings as errors for quality gates" OFF)
 
@@ -9,7 +11,7 @@ if(DEFINED EXCEPTION_HANDLING_STRICT_WARNINGS)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add executable
 add_executable(exception_example src/main.cpp)
@@ -33,3 +35,8 @@ endif()
 set_target_properties(exception_example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+if(BUILD_TESTING)
+    add_test(NAME exception_handling_smoke
+             COMMAND $<TARGET_FILE:exception_example>)
+endif()

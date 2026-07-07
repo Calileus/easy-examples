@@ -25,9 +25,15 @@ jobs:
         run: |
           $listing = ctest --test-dir build -C ${{ matrix.config }} -N
           $listing
-          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
-            throw 'No tests were discovered by CTest.'
+          $match = [regex]::Match($listing, 'Total Tests:\s+(\d+)')
+          if (-not $match.Success) {
+            throw 'CTest did not report total test count.'
           }
+          $count = [int]$match.Groups[1].Value
+          if ($count -lt 7) {
+            throw "Expected at least 7 tests in build-windows job, found $count."
+          }
+          "Discovered tests: $count" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Run tests
         run: ctest --test-dir build -C ${{ matrix.config }} --output-on-failure
@@ -69,9 +75,15 @@ jobs:
         run: |
           $listing = ctest --test-dir build_strict -C Debug -N
           $listing
-          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
-            throw 'No tests were discovered by CTest in strict warnings job.'
+          $match = [regex]::Match($listing, 'Total Tests:\s+(\d+)')
+          if (-not $match.Success) {
+            throw 'CTest did not report total test count in strict warnings job.'
           }
+          $count = [int]$match.Groups[1].Value
+          if ($count -lt 2) {
+            throw "Expected at least 2 tests in strict warnings job, found $count."
+          }
+          "Discovered tests: $count" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Run strict tests
         run: ctest --test-dir build_strict -C Debug --output-on-failure
@@ -116,9 +128,15 @@ jobs:
         run: |
           $listing = ctest --test-dir build_strict_root -C Debug -N
           $listing
-          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
-            throw 'No tests were discovered by CTest in strict root warnings job.'
+          $match = [regex]::Match($listing, 'Total Tests:\s+(\d+)')
+          if (-not $match.Success) {
+            throw 'CTest did not report total test count in strict root warnings job.'
           }
+          $count = [int]$match.Groups[1].Value
+          if ($count -lt 6) {
+            throw "Expected at least 6 tests in strict root warnings job, found $count."
+          }
+          "Discovered tests: $count" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Run strict root tests
         run: ctest --test-dir build_strict_root -C Debug --output-on-failure
@@ -169,9 +187,15 @@ jobs:
         run: |
           $listing = ctest --test-dir build_strict_isolation -C Debug -N
           $listing
-          if ($listing -notmatch 'Total Tests:\s+[1-9][0-9]*') {
-            throw 'No tests were discovered by CTest in strict selector isolation job.'
+          $match = [regex]::Match($listing, 'Total Tests:\s+(\d+)')
+          if (-not $match.Success) {
+            throw 'CTest did not report total test count in strict selector isolation job.'
           }
+          $count = [int]$match.Groups[1].Value
+          if ($count -lt 6) {
+            throw "Expected at least 6 tests in strict selector isolation job, found $count."
+          }
+          "Discovered tests: $count" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Run isolation tests
         run: ctest --test-dir build_strict_isolation -C Debug --output-on-failure

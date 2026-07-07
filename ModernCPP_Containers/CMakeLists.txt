@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(ModernCPP_Containers)
+
+include(CTest)
 
 option(EASYEXAMPLES_STRICT_WARNINGS "Treat warnings as errors for quality gates" OFF)
 
@@ -10,7 +12,7 @@ endif()
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add executable
 add_executable(containers_example main.cpp)
@@ -34,3 +36,8 @@ endif()
 set_target_properties(containers_example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+if(BUILD_TESTING)
+    add_test(NAME moderncpp_containers_smoke
+             COMMAND $<TARGET_FILE:containers_example>)
+endif()

@@ -8,12 +8,10 @@
 /// \version 1.0
 
 #include <windows.h>
-#include <iostream>
 
 /// \brief Program entry point demonstrating basic Win32 MessageBox.
 /// \return Exit code (always 0).
-int main() {
-    MessageBox(NULL, "Hello, Windows!", "Greetings", MB_OK);
-    std::cout << "This is a console output." << std::endl;
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+    MessageBoxA(NULL, "Hello, Windows!", "Greetings", MB_OK | MB_ICONINFORMATION);
     return 0;
 }

@@ -11,27 +11,12 @@
 /// \version 1.0
 
 #include "threaded_market.h"
+#include "portfolio_market.h"
 #include <iostream>
 #include <vector>
 #include <memory>
 #include <chrono>
 #include <future>
-
-// Factory function (same as before)
-std::unique_ptr<FinancialInstrument> createInstrument(const std::string& type, 
-                                                      const std::string& symbol, 
-                                                      double price) {
-    if (type == "stock") {
-        return std::make_unique<Stock>(symbol, price, 100);
-    } else if (type == "bond") {
-        return std::make_unique<Bond>(symbol, price, 5.0, 10);
-    } else if (type == "call") {
-        return std::make_unique<Option>(symbol, price, Option::Type::CALL, 150.0, 10);
-    } else if (type == "put") {
-        return std::make_unique<Option>(symbol, price, Option::Type::PUT, 100.0, 10);
-    }
-    return nullptr;
-}
 
 // Demonstrate basic threading with smart pointers
 void demonstrateBasicThreading() {

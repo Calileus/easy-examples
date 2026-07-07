@@ -194,7 +194,7 @@ cd WindowsHEasiest
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyWindowsProject.exe
+./Debug/windows_h_easiest.exe
 ```
 
 ---
@@ -261,7 +261,7 @@ cd WindowsAndCommctrlH
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyWindowsProject.exe
+./Debug/windows_and_commctrl.exe
 ```
 
 ---
@@ -359,7 +359,7 @@ cd ResourcesAndGdiplus_H
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyWindowsProject.exe
+./Debug/resources_and_gdiplus.exe
 ```
 
 ---
@@ -391,7 +391,7 @@ cd ResourcesProgressBar
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyWindowsProject.exe
+./Debug/resources_progress_bar.exe
 ```
 
 ---
@@ -418,7 +418,7 @@ cd VsCodeCmakeEasiest
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyProject.exe
+./Debug/vscode_cmake_easiest.exe
 ```
 
 ---
@@ -448,7 +448,7 @@ cd VsCodeCmakeW2src
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyProject.exe
+./Debug/vscode_cmake_w2src.exe
 ```
 
 ---
@@ -661,4 +661,6 @@ See governance and engineering process docs:
 - `CONTRIBUTING.md`
 - `SECURITY.md`
 - `docs/RELEASE_CHECKLIST.md`
+- `docs/ENTERPRISE_READINESS_BASELINE.md`
+- `docs/OPERATIONS_RUNBOOK.md`
 - `.github/CODEOWNERS`

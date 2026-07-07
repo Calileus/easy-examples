@@ -18,6 +18,7 @@
 /// \version 1.0
 
 #include "threaded_market.h"
+#include "portfolio_market.h"
 #include <iostream>
 #include <cassert>
 #include <thread>
@@ -38,31 +39,6 @@
             std::cout << "PASS: " << message << std::endl; \
         } \
     } while(0)
-
-// Factory function implementation
-/// \brief Factory function for creating financial instruments by type.
-/// 
-/// Creates different instrument types without exposing the concrete classes
-/// to the test code. Supports "stock", "bond", "call", and "put" types.
-///
-/// \param type String identifying instrument type.
-/// \param symbol Instrument symbol/identifier.
-/// \param price Initial price for the instrument.
-/// \return Unique pointer to created instrument, or nullptr if type is invalid.
-std::unique_ptr<FinancialInstrument> createInstrument(const std::string& type, 
-                                                      const std::string& symbol, 
-                                                      double price) {
-    if (type == "stock") {
-        return std::make_unique<Stock>(symbol, price, 100);
-    } else if (type == "bond") {
-        return std::make_unique<Bond>(symbol, price, 5.0, 10);
-    } else if (type == "call") {
-        return std::make_unique<Option>(symbol, price, Option::Type::CALL, 150.0, 10);
-    } else if (type == "put") {
-        return std::make_unique<Option>(symbol, price, Option::Type::PUT, 100.0, 10);
-    }
-    return nullptr;
-}
 
 bool test_thread_safe_logger() {
     std::cout << "\n=== Testing Thread-Safe Logger ===" << std::endl;
