@@ -15,6 +15,14 @@ cmake --build build --config Debug
 ctest --test-dir build -C Debug --output-on-failure
 ```
 
+Linux/console-only parity check (matches CI Linux lane):
+
+```bash
+cmake -S . -B build_linux -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+cmake --build build_linux
+ctest --test-dir build_linux --output-on-failure
+```
+
 Validate test discovery count:
 
 ```bash
@@ -80,3 +88,4 @@ cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNING
 For CI/build incident response flow and reproducible diagnostics, see:
 
 - `docs/OPERATIONS_RUNBOOK.md`
+- `docs/TESTING_STRATEGY.md`

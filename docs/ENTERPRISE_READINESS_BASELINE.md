@@ -25,7 +25,7 @@ All listed commands completed successfully in this workspace with 7 discovered/p
 ### System Inventory
 
 - Product type: Educational C++ example suite (console + Win32 desktop).
-- Build system: CMake (minimum versions mixed between 3.10 and 3.14).
+- Build system: CMake 3.14 baseline across root and modules.
 - Primary language standards:
   - C++17: `PolimorficSmart`, `ModernCPP_Containers`, `ExceptionHandling`
   - C++11: remaining modules
@@ -88,7 +88,7 @@ flowchart TD
 ### Technical Debt Inventory
 
 - Repeated CMake patterns duplicated across module files.
-- Mixed target naming quality (`MyWindowsProject`, `MyexeWindowsProject` in `Gdiplus_H`).
+- Residual target naming inconsistencies across some legacy educational modules.
 - Minimal formal architecture docs/runbooks beyond README/checklists.
 - Test strategy largely implicit, not standardized per module.
 
@@ -138,9 +138,9 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 
 ## Phase 3 - Enterprise Quality Assessment (0-10)
 
-### Architecture - 5/10
-- Positives: Modular folder layout; root orchestrates examples cleanly.
-- Gaps: Inconsistent standards/conventions; no shared reusable core libraries.
+### Architecture - 6/10
+- Positives: Modular folder layout; root orchestrates examples cleanly; `PolimorficSmart` now uses reusable `financial_core` library target.
+- Gaps: Further naming and structure consistency work remains across Windows modules.
 
 ### Reliability - 5/10
 - Positives: Error handling in `ExceptionHandling`; CTest integration exists.
@@ -154,8 +154,8 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 - Positives: No network attack surface; basic input validation in GUI module.
 - Gaps: Catch-all exception usage and lax parsing patterns existed; no secure coding checklist per module.
 
-### Operations/Observability - 4/10
-- Positives: CI exists, uploads diagnostics artifacts, and now has explicit test count thresholds.
+### Operations/Observability - 5/10
+- Positives: CI exists, uploads diagnostics artifacts, enforces test count thresholds, and now includes Linux console-only validation.
 - Gaps: No structured logs/metrics/traces; no runtime telemetry conventions.
 
 ### Testing - 6/10
@@ -330,6 +330,12 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 - Change: introduced `financial_core` library target and linked all module executables/tests to it.
 - Migration: none required.
 
+7. Testing policy formalization
+- Rationale: make quality gates explicit and repeatable for contributors.
+- Impacted file: `docs/TESTING_STRATEGY.md`
+- Change: added test taxonomy, CI baseline thresholds, acceptance policy, and reproduction flows.
+- Migration: none required.
+
 ---
 
 ## Phase 7 - Verification Evidence
@@ -355,8 +361,8 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ### Recommended Infrastructure
 
-- Continue GitHub Actions for CI with matrix across Debug/Release.
-- Add Linux job for console-only modules (`BUILD_WINDOWS_EXAMPLES=OFF`) to improve portability confidence.
+- Continue GitHub Actions for CI with Windows matrix across Debug/Release and Linux console-only validation (`BUILD_WINDOWS_EXAMPLES=OFF`).
+- Add optional compiler diversification (e.g., dedicated Clang leg) once warning-policy parity is stabilized.
 
 ### Hardware Requirements
 
@@ -390,7 +396,7 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ## Final Score and Recommendation
 
-- Enterprise Readiness Score: **68/100**
+- Enterprise Readiness Score: **73/100**
 - Launch Recommendation: **READY WITH RISKS**
 
 ### Exact Next Actions to Reach READY

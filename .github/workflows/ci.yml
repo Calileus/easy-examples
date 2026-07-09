@@ -5,6 +5,47 @@ on:
   pull_request:
 
 jobs:
+  build-linux-console:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (console-only)
+        run: cmake -S . -B build_linux -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+
+      - name: Build (console-only)
+        run: cmake --build build_linux --config Debug
+
+      - name: Validate test discovery (console-only)
+        run: |
+          listing="$(ctest --test-dir build_linux -N)"
+          echo "$listing"
+          count="$(echo "$listing" | sed -n 's/.*Total Tests: \([0-9][0-9]*\).*/\1/p')"
+          if [ -z "$count" ]; then
+            echo "CTest did not report total test count in build-linux-console job."
+            exit 1
+          fi
+          if [ "$count" -lt 6 ]; then
+            echo "Expected at least 6 tests in build-linux-console job, found $count."
+            exit 1
+          fi
+          echo "Discovered tests: $count" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run tests (console-only)
+        run: ctest --test-dir build_linux --output-on-failure
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-build-linux-console
+          if-no-files-found: ignore
+          path: |
+            build_linux/Testing/Temporary/**
+            build_linux/**/Test.xml
+            build_linux/CMakeFiles/CMakeOutput.log
+            build_linux/CMakeFiles/CMakeError.log
+
   build-windows:
     runs-on: windows-latest
     strategy:

@@ -328,7 +328,7 @@ cd Gdiplus_H
 mkdir build && cd build
 cmake -S .. -B .
 cmake --build .
-./Debug/MyexeWindowsProject.exe
+./Debug/gdiplus_example.exe
 ```
 
 ---
@@ -642,7 +642,7 @@ ctest --test-dir build_strict_root -C Debug --output-on-failure
 - **Target Audience**: C++ learners, intermediate developers, educational use
 - **Language**: C++11/17
 - **Platforms**: Windows (primary), Unix/Linux compatible (CMake portions)
-- **Build System**: CMake 3.10+
+- **Build System**: CMake 3.14+
 - **License**: Educational use
 
 ---
@@ -663,4 +663,5 @@ See governance and engineering process docs:
 - `docs/RELEASE_CHECKLIST.md`
 - `docs/ENTERPRISE_READINESS_BASELINE.md`
 - `docs/OPERATIONS_RUNBOOK.md`
+- `docs/TESTING_STRATEGY.md`
 - `.github/CODEOWNERS`
