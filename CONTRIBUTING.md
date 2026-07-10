@@ -23,6 +23,14 @@ cmake --build build_linux
 ctest --test-dir build_linux --output-on-failure
 ```
 
+Linux/console-only Clang parity check:
+
+```bash
+cmake -S . -B build_linux_clang -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+cmake --build build_linux_clang
+ctest --test-dir build_linux_clang --output-on-failure
+```
+
 Validate test discovery count:
 
 ```bash

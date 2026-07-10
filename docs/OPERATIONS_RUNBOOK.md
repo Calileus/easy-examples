@@ -15,7 +15,8 @@ Provide a repeatable procedure for diagnosing and resolving build and test failu
 - Failing jobs upload diagnostics artifacts prefixed with `diagnostics-`.
 - Key checks:
   - root build matrix (`Debug`, `Release`)
-  - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`)
+  - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler)
+  - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang)
   - strict warnings (`PolimorficSmart` standalone + root-selected + selector isolation)
 
 ## Triage Procedure
@@ -77,6 +78,8 @@ Current expected baselines:
 
 - Root Windows configuration (`BUILD_WINDOWS_EXAMPLES=ON`): at least 7 tests
 - Root strict console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`): at least 6 tests
+- Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler): at least 6 tests
+- Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang): at least 6 tests
 
 ### Strict warnings failures
 

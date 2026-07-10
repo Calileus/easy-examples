@@ -10,11 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Toolchain summary
+        run: |
+          cmake --version
+          c++ --version
+
       - name: Configure (console-only)
         run: cmake -S . -B build_linux -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF
 
       - name: Build (console-only)
-        run: cmake --build build_linux --config Debug
+        run: cmake --build build_linux
 
       - name: Validate test discovery (console-only)
         run: |
@@ -45,6 +50,56 @@ jobs:
             build_linux/**/Test.xml
             build_linux/CMakeFiles/CMakeOutput.log
             build_linux/CMakeFiles/CMakeError.log
+
+  build-linux-console-clang:
+    runs-on: ubuntu-latest
+    env:
+      CC: clang
+      CXX: clang++
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain summary (clang)
+        run: |
+          cmake --version
+          clang --version
+          clang++ --version
+
+      - name: Configure (console-only, clang)
+        run: cmake -S . -B build_linux_clang -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+
+      - name: Build (console-only, clang)
+        run: cmake --build build_linux_clang
+
+      - name: Validate test discovery (console-only, clang)
+        run: |
+          listing="$(ctest --test-dir build_linux_clang -N)"
+          echo "$listing"
+          count="$(echo "$listing" | sed -n 's/.*Total Tests: \([0-9][0-9]*\).*/\1/p')"
+          if [ -z "$count" ]; then
+            echo "CTest did not report total test count in build-linux-console-clang job."
+            exit 1
+          fi
+          if [ "$count" -lt 6 ]; then
+            echo "Expected at least 6 tests in build-linux-console-clang job, found $count."
+            exit 1
+          fi
+          echo "Discovered tests: $count" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run tests (console-only, clang)
+        run: ctest --test-dir build_linux_clang --output-on-failure
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-build-linux-console-clang
+          if-no-files-found: ignore
+          path: |
+            build_linux_clang/Testing/Temporary/**
+            build_linux_clang/**/Test.xml
+            build_linux_clang/CMakeFiles/CMakeOutput.log
+            build_linux_clang/CMakeFiles/CMakeError.log
 
   build-windows:
     runs-on: windows-latest

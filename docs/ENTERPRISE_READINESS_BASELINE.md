@@ -155,11 +155,11 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 - Gaps: Catch-all exception usage and lax parsing patterns existed; no secure coding checklist per module.
 
 ### Operations/Observability - 5/10
-- Positives: CI exists, uploads diagnostics artifacts, enforces test count thresholds, and now includes Linux console-only validation.
+- Positives: CI exists, uploads diagnostics artifacts, enforces test count thresholds, and now includes Linux console-only validation across default and Clang toolchains.
 - Gaps: No structured logs/metrics/traces; no runtime telemetry conventions.
 
 ### Testing - 6/10
-- Positives: CTest now covers all console modules plus deterministic input-validation tests for `WindowsDialog`.
+- Positives: CTest now covers all console modules plus deterministic input-validation tests for `WindowsDialog`, with cross-platform CI coverage including Linux Clang.
 - Gaps: Remaining Win32 GUI interaction flows still rely on manual verification; no coverage reporting.
 
 ### Documentation - 6/10
@@ -361,8 +361,8 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ### Recommended Infrastructure
 
-- Continue GitHub Actions for CI with Windows matrix across Debug/Release and Linux console-only validation (`BUILD_WINDOWS_EXAMPLES=OFF`).
-- Add optional compiler diversification (e.g., dedicated Clang leg) once warning-policy parity is stabilized.
+- Continue GitHub Actions for CI with Windows matrix across Debug/Release and Linux console-only validation (`BUILD_WINDOWS_EXAMPLES=OFF`) on both default and Clang toolchains.
+- Add optional Linux strict-warnings parity lane if warning behavior diverges by compiler over time.
 
 ### Hardware Requirements
 
@@ -396,13 +396,13 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ## Final Score and Recommendation
 
-- Enterprise Readiness Score: **73/100**
+- Enterprise Readiness Score: **75/100**
 - Launch Recommendation: **READY WITH RISKS**
 
 ### Exact Next Actions to Reach READY
 
-1. Standardize all module CMake conventions (version/standard/warnings/naming) and validate in CI.
-2. Add automated smoke tests for all console modules and at least deterministic logic tests for core Win32 input logic.
-3. Introduce a documented test policy (minimum expectations per module).
-4. Add operational runbook (build/test triage + ownership/escalation).
+1. Add deterministic tests for additional Win32 logic paths beyond input parsing (window command/message handlers where practical).
+2. Introduce optional coverage reporting in CI artifacts for trend visibility.
+3. Add lightweight performance baselines for `PolimorficSmart` threading flows and track drift.
+4. Implement structured logging conventions for long-running examples to improve diagnosability.
 5. Clean tracked generated artifacts in a dedicated hygiene PR and enforce ignore rules.

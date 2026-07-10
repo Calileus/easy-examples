@@ -50,6 +50,11 @@ Current strict jobs:
 - Minimum discovered tests: **6**
 - Required checks: configure, build, discovery gate, test execution
 
+### Linux console-only pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang)
+
+- Minimum discovered tests: **6**
+- Required checks: configure, build, discovery gate, test execution
+
 ### Strict root console-only pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`)
 
 - Minimum discovered tests: **6**
@@ -98,4 +103,4 @@ A change is considered test-acceptable when:
 1. Add deterministic unit tests for additional Win32 input/validation helper logic.
 2. Add optional coverage reporting (without making it mandatory for contributors).
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
-4. Expand Linux matrix to an additional compiler lane once warning parity is stable.
+4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)
