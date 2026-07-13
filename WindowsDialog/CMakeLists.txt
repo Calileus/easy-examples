@@ -8,9 +8,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add executable with WIN32 subsystem for GUI
-add_executable(dialog_example WIN32 src/main.cpp src/input_validation.cpp)
+add_executable(dialog_example WIN32 src/main.cpp src/input_validation.cpp src/dialog_logic.cpp)
 
-add_executable(dialog_input_validation_test src/input_validation_test.cpp src/input_validation.cpp)
+add_executable(dialog_input_validation_test src/input_validation_test.cpp src/input_validation.cpp src/dialog_logic.cpp)
 
 # Link Windows libraries
 target_link_libraries(dialog_example

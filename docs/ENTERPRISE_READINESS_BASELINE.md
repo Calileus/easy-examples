@@ -159,7 +159,8 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 - Gaps: No structured logs/metrics/traces; no runtime telemetry conventions.
 
 ### Testing - 6/10
-- Positives: CTest now covers all console modules plus deterministic input-validation tests for `WindowsDialog`, with cross-platform CI coverage including Linux Clang.
+### Testing - 7/10
+- Positives: CTest now covers all console modules plus deterministic `WindowsDialog` logic tests (age validation, name validation, greeting formatting), with cross-platform CI coverage including Linux Clang.
 - Gaps: Remaining Win32 GUI interaction flows still rely on manual verification; no coverage reporting.
 
 ### Documentation - 6/10
@@ -396,12 +397,12 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ## Final Score and Recommendation
 
-- Enterprise Readiness Score: **75/100**
+- Enterprise Readiness Score: **77/100**
 - Launch Recommendation: **READY WITH RISKS**
 
 ### Exact Next Actions to Reach READY
 
-1. Add deterministic tests for additional Win32 logic paths beyond input parsing (window command/message handlers where practical).
+1. Add deterministic tests for additional Win32 logic paths beyond current validation/formatting coverage (window command/message handlers where practical).
 2. Introduce optional coverage reporting in CI artifacts for trend visibility.
 3. Add lightweight performance baselines for `PolimorficSmart` threading flows and track drift.
 4. Implement structured logging conventions for long-running examples to improve diagnosability.

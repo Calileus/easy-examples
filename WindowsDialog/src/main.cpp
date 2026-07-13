@@ -13,8 +13,8 @@
 /// \version 1.0
 
 #include <windows.h>
-#include <sstream>
 #include <string>
+#include "dialog_logic.h"
 #include "input_validation.h"
 
 #define IDC_EDIT_NAME 1001      ///< Edit control ID for name input.
@@ -53,7 +53,7 @@ void ValidateAndDisplay(HWND hwnd) {
     std::string ageStr = GetEditText(hwnd, IDC_EDIT_AGE);
     
     // Validate name
-    if (name.empty()) {
+    if (!IsNameValid(name)) {
         MessageBoxA(hwnd, "Please enter a name.", "Validation Error", MB_OK | MB_ICONWARNING);
         return;
     }
@@ -65,12 +65,9 @@ void ValidateAndDisplay(HWND hwnd) {
         return;
     }
     
-    // Display results
-    std::stringstream ss;
-    ss << "Hello, " << name << "!\nYou are " << age << " years old.";
-    
-    SetStaticText(hwnd, IDC_STATIC_OUTPUT, ss.str());
-    MessageBoxA(hwnd, ss.str().c_str(), "Input Received", MB_OK | MB_ICONINFORMATION);
+    const std::string greetingMessage = BuildGreetingMessage(name, age);
+    SetStaticText(hwnd, IDC_STATIC_OUTPUT, greetingMessage);
+    MessageBoxA(hwnd, greetingMessage.c_str(), "Input Received", MB_OK | MB_ICONINFORMATION);
 }
 
 /// \brief Window message handler for the dialog window.

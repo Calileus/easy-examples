@@ -1,4 +1,5 @@
 #include "input_validation.h"
+#include "dialog_logic.h"
 
 #include <iostream>
 
@@ -29,14 +30,24 @@ bool RunValidationTests() {
     return true;
 }
 
+bool RunDialogLogicTests() {
+    if (!AssertTrue(!IsNameValid(""), "Rejects empty name")) return false;
+    if (!AssertTrue(IsNameValid("Alice"), "Accepts non-empty name")) return false;
+
+    const std::string message = BuildGreetingMessage("Alice", 42);
+    if (!AssertTrue(message == "Hello, Alice!\nYou are 42 years old.", "Builds greeting message with expected format")) return false;
+
+    return true;
+}
+
 } // namespace
 
 int main() {
-    if (RunValidationTests()) {
-        std::cout << "All input validation tests passed." << std::endl;
+    if (RunValidationTests() && RunDialogLogicTests()) {
+        std::cout << "All dialog validation tests passed." << std::endl;
         return 0;
     }
 
-    std::cout << "Input validation tests failed." << std::endl;
+    std::cout << "Dialog validation tests failed." << std::endl;
     return 1;
 }

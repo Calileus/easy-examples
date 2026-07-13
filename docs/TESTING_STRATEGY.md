@@ -26,6 +26,9 @@ Current functional coverage:
 - `financial_simple_test`
 - `financial_threaded_test`
 - `windows_dialog_input_validation_test`
+	- Covers age parsing/validation
+	- Covers name validation
+	- Covers greeting message formatting
 - Optional: `financial_gtest_suite` (when GTest is available)
 
 ### 3) Strict-Warnings Quality Gates
@@ -100,7 +103,7 @@ A change is considered test-acceptable when:
 
 ## Roadmap (Testing)
 
-1. Add deterministic unit tests for additional Win32 input/validation helper logic.
+1. Add deterministic unit tests for additional Win32 input/validation helper logic. ✅ In progress (name validation + greeting formatting now covered)
 2. Add optional coverage reporting (without making it mandatory for contributors).
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
 4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)
