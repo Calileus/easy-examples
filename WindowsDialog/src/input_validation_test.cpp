@@ -1,5 +1,7 @@
 #include "input_validation.h"
 #include "dialog_logic.h"
+#include "dialog_commands.h"
+#include "dialog_submission.h"
 
 #include <iostream>
 
@@ -40,10 +42,55 @@ bool RunDialogLogicTests() {
     return true;
 }
 
+bool RunDialogCommandTests() {
+    if (!AssertTrue(DetermineDialogAction(123, kDialogSubmitButtonId) == DialogAction::None,
+                    "Ignores non-click notification codes")) return false;
+
+    if (!AssertTrue(DetermineDialogAction(kDialogButtonClickedNotification, kDialogSubmitButtonId) == DialogAction::Submit,
+                    "Maps submit button click to submit action")) return false;
+
+    if (!AssertTrue(DetermineDialogAction(kDialogButtonClickedNotification, kDialogClearButtonId) == DialogAction::Clear,
+                    "Maps clear button click to clear action")) return false;
+
+    if (!AssertTrue(DetermineDialogAction(kDialogButtonClickedNotification, 9999) == DialogAction::None,
+                    "Ignores unknown control IDs")) return false;
+
+    const DialogResetPolicy resetPolicy = GetDialogResetPolicy();
+    if (!AssertTrue(resetPolicy.focusControlId == kDialogEditNameId,
+                    "Reset policy focuses name edit control")) return false;
+
+    if (!AssertTrue(std::string(resetPolicy.outputText) == "Results will appear here",
+                    "Reset policy uses expected default output text")) return false;
+
+    return true;
+}
+
+bool RunDialogSubmissionTests() {
+    const DialogSubmissionResult missingName = EvaluateDialogSubmission("", "25");
+    if (!AssertTrue(missingName.status == DialogSubmissionStatus::MissingName,
+                    "Submission reports missing-name status")) return false;
+    if (!AssertTrue(missingName.message == "Please enter a name.",
+                    "Submission reports expected missing-name message")) return false;
+
+    const DialogSubmissionResult invalidAge = EvaluateDialogSubmission("Alice", "abc");
+    if (!AssertTrue(invalidAge.status == DialogSubmissionStatus::InvalidAge,
+                    "Submission reports invalid-age status")) return false;
+    if (!AssertTrue(invalidAge.message == "Age must be a valid number between 0 and 150.",
+                    "Submission reports expected invalid-age message")) return false;
+
+    const DialogSubmissionResult success = EvaluateDialogSubmission("Alice", "42");
+    if (!AssertTrue(success.status == DialogSubmissionStatus::Success,
+                    "Submission reports success status")) return false;
+    if (!AssertTrue(success.message == "Hello, Alice!\nYou are 42 years old.",
+                    "Submission reports expected success message")) return false;
+
+    return true;
+}
+
 } // namespace
 
 int main() {
-    if (RunValidationTests() && RunDialogLogicTests()) {
+    if (RunValidationTests() && RunDialogLogicTests() && RunDialogCommandTests() && RunDialogSubmissionTests()) {
         std::cout << "All dialog validation tests passed." << std::endl;
         return 0;
     }

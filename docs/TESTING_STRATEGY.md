@@ -29,6 +29,8 @@ Current functional coverage:
 	- Covers age parsing/validation
 	- Covers name validation
 	- Covers greeting message formatting
+	- Covers `WM_COMMAND` action mapping for submit/clear/ignored controls
+	- Covers default output text policy for clear/reset behavior
 - Optional: `financial_gtest_suite` (when GTest is available)
 
 ### 3) Strict-Warnings Quality Gates
@@ -103,7 +105,9 @@ A change is considered test-acceptable when:
 
 ## Roadmap (Testing)
 
-1. Add deterministic unit tests for additional Win32 input/validation helper logic. ✅ In progress (name validation + greeting formatting now covered)
+1. Add deterministic unit tests for additional Win32 input/validation helper logic. ✅ In progress (name validation + greeting formatting + command routing now covered)
+	- Current coverage now includes reset policy behavior (focus target + default output text).
+	- Current coverage now includes submit-state branch evaluation (missing name, invalid age, success path).
 2. Add optional coverage reporting (without making it mandatory for contributors).
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
 4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)

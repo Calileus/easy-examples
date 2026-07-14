@@ -14,14 +14,10 @@
 
 #include <windows.h>
 #include <string>
+#include "dialog_commands.h"
 #include "dialog_logic.h"
+#include "dialog_submission.h"
 #include "input_validation.h"
-
-#define IDC_EDIT_NAME 1001      ///< Edit control ID for name input.
-#define IDC_EDIT_AGE 1002       ///< Edit control ID for age input.
-#define IDC_BUTTON_OK 1003      ///< OK button ID.
-#define IDC_BUTTON_CLEAR 1004   ///< Clear button ID.
-#define IDC_STATIC_OUTPUT 1005  ///< Static text control for output.
 
 /// \brief Forward declaration of window procedure.
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -49,25 +45,17 @@ void SetStaticText(HWND hwnd, int id, const std::string& text) {
 /// \brief Validate user input and display results.
 /// \param hwnd Main window handle.
 void ValidateAndDisplay(HWND hwnd) {
-    std::string name = GetEditText(hwnd, IDC_EDIT_NAME);
-    std::string ageStr = GetEditText(hwnd, IDC_EDIT_AGE);
-    
-    // Validate name
-    if (!IsNameValid(name)) {
-        MessageBoxA(hwnd, "Please enter a name.", "Validation Error", MB_OK | MB_ICONWARNING);
+    std::string name = GetEditText(hwnd, kDialogEditNameId);
+    std::string ageStr = GetEditText(hwnd, kDialogEditAgeId);
+
+    const DialogSubmissionResult result = EvaluateDialogSubmission(name, ageStr);
+    if (result.status == DialogSubmissionStatus::Success) {
+        SetStaticText(hwnd, kDialogOutputStaticId, result.message);
+        MessageBoxA(hwnd, result.message.c_str(), "Input Received", MB_OK | MB_ICONINFORMATION);
         return;
     }
-    
-    // Validate age
-    int age = 0;
-    if (!TryParseValidatedAge(ageStr, age)) {
-        MessageBoxA(hwnd, "Age must be a valid number between 0 and 150.", "Validation Error", MB_OK | MB_ICONWARNING);
-        return;
-    }
-    
-    const std::string greetingMessage = BuildGreetingMessage(name, age);
-    SetStaticText(hwnd, IDC_STATIC_OUTPUT, greetingMessage);
-    MessageBoxA(hwnd, greetingMessage.c_str(), "Input Received", MB_OK | MB_ICONINFORMATION);
+
+    MessageBoxA(hwnd, result.message.c_str(), "Validation Error", MB_OK | MB_ICONWARNING);
 }
 
 /// \brief Window message handler for the dialog window.
@@ -79,6 +67,8 @@ void ValidateAndDisplay(HWND hwnd) {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
     case WM_CREATE: {
+        const DialogResetPolicy resetPolicy = GetDialogResetPolicy();
+
         // Create label for name
         CreateWindowA("STATIC", "Name:",
             WS_CHILD | WS_VISIBLE,
@@ -89,7 +79,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         CreateWindowA("EDIT", "",
             WS_CHILD | WS_VISIBLE | WS_BORDER,
             80, 20, 200, 25,
-            hwnd, (HMENU)IDC_EDIT_NAME, GetModuleHandle(NULL), NULL);
+            hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogEditNameId)), GetModuleHandle(NULL), NULL);
         
         // Create label for age
         CreateWindowA("STATIC", "Age:",
@@ -101,43 +91,43 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         CreateWindowA("EDIT", "",
             WS_CHILD | WS_VISIBLE | WS_BORDER,
             80, 60, 200, 25,
-            hwnd, (HMENU)IDC_EDIT_AGE, GetModuleHandle(NULL), NULL);
+            hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogEditAgeId)), GetModuleHandle(NULL), NULL);
         
         // Create OK button
         CreateWindowA("BUTTON", "Submit",
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
             80, 100, 90, 30,
-            hwnd, (HMENU)IDC_BUTTON_OK, GetModuleHandle(NULL), NULL);
+            hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogSubmitButtonId)), GetModuleHandle(NULL), NULL);
         
         // Create Clear button
         CreateWindowA("BUTTON", "Clear",
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
             190, 100, 90, 30,
-            hwnd, (HMENU)IDC_BUTTON_CLEAR, GetModuleHandle(NULL), NULL);
+            hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogClearButtonId)), GetModuleHandle(NULL), NULL);
         
         // Create output static text
-        CreateWindowA("STATIC", "Results will appear here",
+        CreateWindowA("STATIC", resetPolicy.outputText,
             WS_CHILD | WS_VISIBLE | SS_LEFT,
             20, 150, 260, 60,
-            hwnd, (HMENU)IDC_STATIC_OUTPUT, GetModuleHandle(NULL), NULL);
+            hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogOutputStaticId)), GetModuleHandle(NULL), NULL);
         
         return 0;
     }
     
     case WM_COMMAND: {
+        const DialogResetPolicy resetPolicy = GetDialogResetPolicy();
         int id = LOWORD(wParam);
         int code = HIWORD(wParam);
-        
-        if (code == BN_CLICKED) {
-            if (id == IDC_BUTTON_OK) {
-                ValidateAndDisplay(hwnd);
-            } else if (id == IDC_BUTTON_CLEAR) {
-                // Clear edit controls
-                SetWindowTextA(GetDlgItem(hwnd, IDC_EDIT_NAME), "");
-                SetWindowTextA(GetDlgItem(hwnd, IDC_EDIT_AGE), "");
-                SetStaticText(hwnd, IDC_STATIC_OUTPUT, "Results will appear here");
-                SetFocus(GetDlgItem(hwnd, IDC_EDIT_NAME));
-            }
+
+        const DialogAction action = DetermineDialogAction(code, id);
+
+        if (action == DialogAction::Submit) {
+            ValidateAndDisplay(hwnd);
+        } else if (action == DialogAction::Clear) {
+            SetWindowTextA(GetDlgItem(hwnd, kDialogEditNameId), "");
+            SetWindowTextA(GetDlgItem(hwnd, kDialogEditAgeId), "");
+            SetStaticText(hwnd, kDialogOutputStaticId, resetPolicy.outputText);
+            SetFocus(GetDlgItem(hwnd, resetPolicy.focusControlId));
         }
         return 0;
     }
