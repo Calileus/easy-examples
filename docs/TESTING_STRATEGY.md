@@ -108,6 +108,7 @@ A change is considered test-acceptable when:
 1. Add deterministic unit tests for additional Win32 input/validation helper logic. ✅ In progress (name validation + greeting formatting + command routing now covered)
 	- Current coverage now includes reset policy behavior (focus target + default output text).
 	- Current coverage now includes submit-state branch evaluation (missing name, invalid age, success path).
+	- Current coverage now includes lifecycle layout policy invariants (window class/title/size and control captions/default output alignment).
 2. Add optional coverage reporting (without making it mandatory for contributors).
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
 4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)

@@ -15,6 +15,7 @@
 #include <windows.h>
 #include <string>
 #include "dialog_commands.h"
+#include "dialog_layout.h"
 #include "dialog_logic.h"
 #include "dialog_submission.h"
 #include "input_validation.h"
@@ -68,47 +69,54 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     switch (uMsg) {
     case WM_CREATE: {
         const DialogResetPolicy resetPolicy = GetDialogResetPolicy();
+        const DialogControlLayout nameLabelLayout = GetDialogControlLayout(DialogControlKind::NameLabel);
+        const DialogControlLayout nameEditLayout = GetDialogControlLayout(DialogControlKind::NameEdit);
+        const DialogControlLayout ageLabelLayout = GetDialogControlLayout(DialogControlKind::AgeLabel);
+        const DialogControlLayout ageEditLayout = GetDialogControlLayout(DialogControlKind::AgeEdit);
+        const DialogControlLayout submitButtonLayout = GetDialogControlLayout(DialogControlKind::SubmitButton);
+        const DialogControlLayout clearButtonLayout = GetDialogControlLayout(DialogControlKind::ClearButton);
+        const DialogControlLayout outputStaticLayout = GetDialogControlLayout(DialogControlKind::OutputStatic);
 
         // Create label for name
-        CreateWindowA("STATIC", "Name:",
+        CreateWindowA("STATIC", nameLabelLayout.caption,
             WS_CHILD | WS_VISIBLE,
-            20, 20, 50, 25,
+            nameLabelLayout.x, nameLabelLayout.y, nameLabelLayout.width, nameLabelLayout.height,
             hwnd, (HMENU)-1, GetModuleHandle(NULL), NULL);
         
         // Create edit control for name
         CreateWindowA("EDIT", "",
             WS_CHILD | WS_VISIBLE | WS_BORDER,
-            80, 20, 200, 25,
+            nameEditLayout.x, nameEditLayout.y, nameEditLayout.width, nameEditLayout.height,
             hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogEditNameId)), GetModuleHandle(NULL), NULL);
         
         // Create label for age
-        CreateWindowA("STATIC", "Age:",
+        CreateWindowA("STATIC", ageLabelLayout.caption,
             WS_CHILD | WS_VISIBLE,
-            20, 60, 50, 25,
+            ageLabelLayout.x, ageLabelLayout.y, ageLabelLayout.width, ageLabelLayout.height,
             hwnd, (HMENU)-1, GetModuleHandle(NULL), NULL);
         
         // Create edit control for age
         CreateWindowA("EDIT", "",
             WS_CHILD | WS_VISIBLE | WS_BORDER,
-            80, 60, 200, 25,
+            ageEditLayout.x, ageEditLayout.y, ageEditLayout.width, ageEditLayout.height,
             hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogEditAgeId)), GetModuleHandle(NULL), NULL);
         
         // Create OK button
-        CreateWindowA("BUTTON", "Submit",
+        CreateWindowA("BUTTON", submitButtonLayout.caption,
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-            80, 100, 90, 30,
+            submitButtonLayout.x, submitButtonLayout.y, submitButtonLayout.width, submitButtonLayout.height,
             hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogSubmitButtonId)), GetModuleHandle(NULL), NULL);
         
         // Create Clear button
-        CreateWindowA("BUTTON", "Clear",
+        CreateWindowA("BUTTON", clearButtonLayout.caption,
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-            190, 100, 90, 30,
+            clearButtonLayout.x, clearButtonLayout.y, clearButtonLayout.width, clearButtonLayout.height,
             hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogClearButtonId)), GetModuleHandle(NULL), NULL);
         
         // Create output static text
-        CreateWindowA("STATIC", resetPolicy.outputText,
+        CreateWindowA("STATIC", outputStaticLayout.caption,
             WS_CHILD | WS_VISIBLE | SS_LEFT,
-            20, 150, 260, 60,
+            outputStaticLayout.x, outputStaticLayout.y, outputStaticLayout.width, outputStaticLayout.height,
             hwnd, reinterpret_cast<HMENU>(static_cast<UINT_PTR>(kDialogOutputStaticId)), GetModuleHandle(NULL), NULL);
         
         return 0;
@@ -145,12 +153,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 /// \param nShowCmd Window display mode.
 /// \return Exit code.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd) {
-    const char CLASS_NAME[] = "DialogExampleWindowClass";
+    const DialogWindowLayout windowLayout = GetDialogWindowLayout();
     
     WNDCLASSA wc = {};
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = CLASS_NAME;
+    wc.lpszClassName = windowLayout.className;
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.hCursor = LoadCursorA(NULL, IDC_ARROW);
     
@@ -158,10 +166,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nShowCmd) {
     
     HWND hwnd = CreateWindowExA(
         0,
-        CLASS_NAME,
-        "Dialog Example - Input Validation",
+        windowLayout.className,
+        windowLayout.title,
         WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 330, 270,
+        CW_USEDEFAULT, CW_USEDEFAULT, windowLayout.width, windowLayout.height,
         NULL,
         NULL,
         hInstance,

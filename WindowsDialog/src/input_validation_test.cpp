@@ -1,6 +1,7 @@
 #include "input_validation.h"
 #include "dialog_logic.h"
 #include "dialog_commands.h"
+#include "dialog_layout.h"
 #include "dialog_submission.h"
 
 #include <iostream>
@@ -87,10 +88,35 @@ bool RunDialogSubmissionTests() {
     return true;
 }
 
+bool RunDialogLayoutTests() {
+    const DialogWindowLayout windowLayout = GetDialogWindowLayout();
+    if (!AssertTrue(std::string(windowLayout.className) == "DialogExampleWindowClass",
+                    "Window layout provides expected class name")) return false;
+    if (!AssertTrue(std::string(windowLayout.title) == "Dialog Example - Input Validation",
+                    "Window layout provides expected title")) return false;
+    if (!AssertTrue(windowLayout.width == 330 && windowLayout.height == 270,
+                    "Window layout provides expected dimensions")) return false;
+
+    const DialogControlLayout submitLayout = GetDialogControlLayout(DialogControlKind::SubmitButton);
+    if (!AssertTrue(std::string(submitLayout.caption) == "Submit",
+                    "Submit button layout provides expected caption")) return false;
+
+    const DialogControlLayout clearLayout = GetDialogControlLayout(DialogControlKind::ClearButton);
+    if (!AssertTrue(std::string(clearLayout.caption) == "Clear",
+                    "Clear button layout provides expected caption")) return false;
+
+    const DialogControlLayout outputLayout = GetDialogControlLayout(DialogControlKind::OutputStatic);
+    const DialogResetPolicy resetPolicy = GetDialogResetPolicy();
+    if (!AssertTrue(std::string(outputLayout.caption) == std::string(resetPolicy.outputText),
+                    "Output static layout caption matches reset policy text")) return false;
+
+    return true;
+}
+
 } // namespace
 
 int main() {
-    if (RunValidationTests() && RunDialogLogicTests() && RunDialogCommandTests() && RunDialogSubmissionTests()) {
+    if (RunValidationTests() && RunDialogLogicTests() && RunDialogCommandTests() && RunDialogSubmissionTests() && RunDialogLayoutTests()) {
         std::cout << "All dialog validation tests passed." << std::endl;
         return 0;
     }
