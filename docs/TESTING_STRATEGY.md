@@ -60,6 +60,12 @@ Current strict jobs:
 - Minimum discovered tests: **6**
 - Required checks: configure, build, discovery gate, test execution
 
+### Optional Linux coverage pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`, GNU/Clang coverage flags)
+
+- Minimum discovered tests: **6**
+- Required checks: configure, build, discovery gate, test execution
+- Outputs: raw coverage artifacts (`.gcno`, `.gcda`) uploaded for trend analysis
+
 ### Strict root console-only pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`)
 
 - Minimum discovered tests: **6**
@@ -110,5 +116,8 @@ A change is considered test-acceptable when:
 	- Current coverage now includes submit-state branch evaluation (missing name, invalid age, success path).
 	- Current coverage now includes lifecycle layout policy invariants (window class/title/size and control captions/default output alignment).
 2. Add optional coverage reporting (without making it mandatory for contributors).
+	- ✅ Raw coverage artifact collection added via `coverage-linux-console` CI job.
+	- ✅ Human-readable per-module raw artifact summary added to CI step summary and uploaded report.
+	- Next step: add line/branch percentage report generation from raw artifacts.
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
 4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)

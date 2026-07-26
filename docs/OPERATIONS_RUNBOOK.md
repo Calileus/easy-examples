@@ -17,6 +17,7 @@ Provide a repeatable procedure for diagnosing and resolving build and test failu
   - root build matrix (`Debug`, `Release`)
   - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler)
   - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang)
+  - optional Linux coverage artifact lane (`coverage-linux-console`)
   - strict warnings (`PolimorficSmart` standalone + root-selected + selector isolation)
 
 ## Triage Procedure
@@ -80,6 +81,7 @@ Current expected baselines:
 - Root strict console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`): at least 6 tests
 - Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler): at least 6 tests
 - Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang): at least 6 tests
+- Linux coverage configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, optional lane): at least 6 tests
 
 ### Strict warnings failures
 

@@ -31,6 +31,14 @@ cmake --build build_linux_clang
 ctest --test-dir build_linux_clang --output-on-failure
 ```
 
+Optional Linux coverage artifact flow:
+
+```bash
+cmake -S . -B build_coverage_linux -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF -DEASYEXAMPLES_ENABLE_COVERAGE=ON
+cmake --build build_coverage_linux
+ctest --test-dir build_coverage_linux --output-on-failure
+```
+
 Validate test discovery count:
 
 ```bash
@@ -41,6 +49,7 @@ Current CI-aligned minimums:
 
 - Root Windows build (`BUILD_WINDOWS_EXAMPLES=ON`): at least 7 tests
 - Root strict console-only build (`BUILD_WINDOWS_EXAMPLES=OFF`): at least 6 tests
+- Optional Linux coverage build (`coverage-linux-console`): at least 6 tests
 
 ## Strict Warnings Gate (Optional Local Repro)
 
