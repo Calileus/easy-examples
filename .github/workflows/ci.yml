@@ -89,6 +89,139 @@ jobs:
             sed -n '1,120p' "$coverage_summary_file" | tail -n +7
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Generate coverage percentage summary (best effort)
+        if: always()
+        run: |
+          coverage_percent_file="coverage_report/coverage-percent-summary.txt"
+          coverage_metrics_file="coverage_report/coverage-metrics.env"
+          {
+            echo "Coverage percentage summary (best effort via gcov)"
+            echo "================================================="
+          } > "$coverage_percent_file"
+
+          mapfile -t gcda_files < <(find build_coverage_linux -type f -name '*.gcda')
+          if [ "${#gcda_files[@]}" -eq 0 ]; then
+            echo "No .gcda files found; percentage summary unavailable." | tee -a "$coverage_percent_file"
+            {
+              echo "### Coverage Percentages"
+              echo "- No .gcda files found; percentage summary unavailable."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          line_num=0
+          line_den=0
+          branch_num=0
+          branch_den=0
+          processed=0
+
+          for gcda in "${gcda_files[@]}"; do
+            gcov_output="$(gcov -b -c "$gcda" 2>/dev/null || true)"
+
+            line_pct="$(echo "$gcov_output" | awk -F'[:% ]+' '/^Lines executed:/{print $3; exit}')"
+            line_total="$(echo "$gcov_output" | awk -F'[:% ]+' '/^Lines executed:/{print $5; exit}')"
+            branch_pct="$(echo "$gcov_output" | awk -F'[:% ]+' '/^Branches executed:/{print $3; exit}')"
+            branch_total="$(echo "$gcov_output" | awk -F'[:% ]+' '/^Branches executed:/{print $5; exit}')"
+
+            if [ -n "$line_pct" ] && [ -n "$line_total" ]; then
+              line_cov="$(awk -v p="$line_pct" -v t="$line_total" 'BEGIN {printf "%.6f", (p*t)/100.0}')"
+              line_num="$(awk -v a="$line_num" -v b="$line_cov" 'BEGIN {printf "%.6f", a+b}')"
+              line_den="$(awk -v a="$line_den" -v b="$line_total" 'BEGIN {printf "%.6f", a+b}')"
+            fi
+
+            if [ -n "$branch_pct" ] && [ -n "$branch_total" ]; then
+              branch_cov="$(awk -v p="$branch_pct" -v t="$branch_total" 'BEGIN {printf "%.6f", (p*t)/100.0}')"
+              branch_num="$(awk -v a="$branch_num" -v b="$branch_cov" 'BEGIN {printf "%.6f", a+b}')"
+              branch_den="$(awk -v a="$branch_den" -v b="$branch_total" 'BEGIN {printf "%.6f", a+b}')"
+            fi
+
+            processed=$((processed + 1))
+          done
+
+          line_pct_total="N/A"
+          branch_pct_total="N/A"
+          if awk -v d="$line_den" 'BEGIN {exit !(d > 0)}'; then
+            line_pct_total="$(awk -v n="$line_num" -v d="$line_den" 'BEGIN {printf "%.2f", (n/d)*100.0}')"
+          fi
+          if awk -v d="$branch_den" 'BEGIN {exit !(d > 0)}'; then
+            branch_pct_total="$(awk -v n="$branch_num" -v d="$branch_den" 'BEGIN {printf "%.2f", (n/d)*100.0}')"
+          fi
+
+          {
+            echo "Processed gcda files: $processed"
+            echo "Estimated line coverage: ${line_pct_total}%"
+            echo "Estimated branch coverage: ${branch_pct_total}%"
+            echo
+            echo "Note: summary is best-effort based on available gcov output."
+          } | tee -a "$coverage_percent_file"
+
+          {
+            echo "LINE_COVERAGE=${line_pct_total}"
+            echo "BRANCH_COVERAGE=${branch_pct_total}"
+            echo "GCDA_FILES_PROCESSED=${processed}"
+          } > "$coverage_metrics_file"
+
+          {
+            echo "### Coverage Percentages"
+            echo "- Processed gcda files: $processed"
+            echo "- Estimated line coverage: ${line_pct_total}%"
+            echo "- Estimated branch coverage: ${branch_pct_total}%"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compare coverage against informational thresholds
+        if: always()
+        run: |
+          coverage_metrics_file="coverage_report/coverage-metrics.env"
+          thresholds_file=".github/coverage-thresholds.env"
+
+          if [ ! -f "$coverage_metrics_file" ]; then
+            echo "Coverage metrics file not found; threshold comparison skipped."
+            exit 0
+          fi
+
+          source "$coverage_metrics_file"
+
+          line_threshold="0.00"
+          branch_threshold="0.00"
+          if [ -f "$thresholds_file" ]; then
+            source "$thresholds_file"
+            line_threshold="${LINE_COVERAGE_MIN:-0.00}"
+            branch_threshold="${BRANCH_COVERAGE_MIN:-0.00}"
+          fi
+
+          line_status="N/A"
+          branch_status="N/A"
+          line_delta="N/A"
+          branch_delta="N/A"
+
+          if [ "$LINE_COVERAGE" != "N/A" ]; then
+            line_delta="$(awk -v c="$LINE_COVERAGE" -v t="$line_threshold" 'BEGIN {printf "%.2f", c-t}')"
+            if awk -v c="$LINE_COVERAGE" -v t="$line_threshold" 'BEGIN {exit !(c < t)}'; then
+              line_status="WARN"
+              echo "::warning::Line coverage ${LINE_COVERAGE}% is below informational threshold ${line_threshold}%"
+            else
+              line_status="OK"
+            fi
+          fi
+
+          if [ "$BRANCH_COVERAGE" != "N/A" ]; then
+            branch_delta="$(awk -v c="$BRANCH_COVERAGE" -v t="$branch_threshold" 'BEGIN {printf "%.2f", c-t}')"
+            if awk -v c="$BRANCH_COVERAGE" -v t="$branch_threshold" 'BEGIN {exit !(c < t)}'; then
+              branch_status="WARN"
+              echo "::warning::Branch coverage ${BRANCH_COVERAGE}% is below informational threshold ${branch_threshold}%"
+            else
+              branch_status="OK"
+            fi
+          fi
+
+          {
+            echo "### Coverage Threshold Check (Informational)"
+            echo "- Threshold file: ${thresholds_file}"
+            echo "- Line coverage: ${LINE_COVERAGE}% (threshold ${line_threshold}%, delta ${line_delta}, status ${line_status})"
+            echo "- Branch coverage: ${BRANCH_COVERAGE}% (threshold ${branch_threshold}%, delta ${branch_delta}, status ${branch_status})"
+            echo "- Note: this check is informational and does not fail CI."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload coverage artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -101,6 +234,8 @@ jobs:
             build_coverage_linux/Testing/Temporary/**
             build_coverage_linux/**/Test.xml
             coverage_report/raw-coverage-summary.txt
+            coverage_report/coverage-percent-summary.txt
+            coverage_report/coverage-metrics.env
 
   build-linux-console:
     runs-on: ubuntu-latest

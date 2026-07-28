@@ -65,6 +65,8 @@ Current strict jobs:
 - Minimum discovered tests: **6**
 - Required checks: configure, build, discovery gate, test execution
 - Outputs: raw coverage artifacts (`.gcno`, `.gcda`) uploaded for trend analysis
+- Outputs: best-effort line/branch percentage summary in CI step summary and uploaded `coverage-percent-summary.txt`
+- Outputs: informational threshold check against `.github/coverage-thresholds.env` with delta reporting in CI summary
 
 ### Strict root console-only pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`)
 
@@ -118,6 +120,8 @@ A change is considered test-acceptable when:
 2. Add optional coverage reporting (without making it mandatory for contributors).
 	- ✅ Raw coverage artifact collection added via `coverage-linux-console` CI job.
 	- ✅ Human-readable per-module raw artifact summary added to CI step summary and uploaded report.
-	- Next step: add line/branch percentage report generation from raw artifacts.
+	- ✅ Best-effort line/branch percentage report generation added from raw artifacts.
+	- ✅ Informational threshold tracking added via `.github/coverage-thresholds.env`.
+	- Next step: improve percentage precision and consider optional trend persistence across runs.
 3. Introduce lightweight performance baselines for `PolimorficSmart` threading workloads.
 4. Expand Linux matrix to an additional compiler lane once warning parity is stable. ✅ Completed (`build-linux-console-clang`)

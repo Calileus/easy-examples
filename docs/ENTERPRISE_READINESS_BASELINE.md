@@ -155,7 +155,7 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 - Gaps: Catch-all exception usage and lax parsing patterns existed; no secure coding checklist per module.
 
 ### Operations/Observability - 5/10
-- Positives: CI exists, uploads diagnostics artifacts, enforces test count thresholds, includes Linux console-only validation across default and Clang toolchains, and now publishes optional raw coverage artifacts with human-readable per-module summaries.
+- Positives: CI exists, uploads diagnostics artifacts, enforces test count thresholds, includes Linux console-only validation across default and Clang toolchains, and now publishes optional raw coverage artifacts with human-readable per-module and best-effort line/branch percentage summaries plus informational threshold drift checks.
 - Gaps: No structured logs/metrics/traces; no runtime telemetry conventions.
 
 ### Testing - 6/10
@@ -350,7 +350,7 @@ The repository is a learning-oriented suite showing progressive C++ and Win32 ex
 Known verification gaps:
 - No automated GUI E2E tests for Win32 examples.
 - No dedicated performance benchmark suite.
-- No line/branch percentage coverage reporting pipeline.
+- Coverage percentages are best-effort summaries and threshold checks are informational only.
 
 ---
 
@@ -397,13 +397,13 @@ The repository is a solid educational C++ examples project with good modular bou
 
 ## Final Score and Recommendation
 
-- Enterprise Readiness Score: **84/100**
+- Enterprise Readiness Score: **86/100**
 - Launch Recommendation: **READY WITH RISKS**
 
 ### Exact Next Actions to Reach READY
 
 1. Add deterministic tests for additional Win32 logic paths beyond current validation/formatting/command-routing/reset/submission/lifecycle-layout coverage (state transitions around runtime interactions where practical).
-2. Add line/branch percentage coverage reports derived from raw CI coverage artifacts.
+2. Improve coverage percentage precision and add optional historical trend persistence across runs.
 3. Add lightweight performance baselines for `PolimorficSmart` threading flows and track drift.
 4. Implement structured logging conventions for long-running examples to improve diagnosability.
 5. Clean tracked generated artifacts in a dedicated hygiene PR and enforce ignore rules.

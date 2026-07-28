@@ -18,6 +18,7 @@ Provide a repeatable procedure for diagnosing and resolving build and test failu
   - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler)
   - Linux console-only build/test (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang)
   - optional Linux coverage artifact lane (`coverage-linux-console`)
+    - includes informational threshold comparison using `.github/coverage-thresholds.env`
   - strict warnings (`PolimorficSmart` standalone + root-selected + selector isolation)
 
 ## Triage Procedure
@@ -82,6 +83,7 @@ Current expected baselines:
 - Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, default compiler): at least 6 tests
 - Linux console-only configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, Clang): at least 6 tests
 - Linux coverage configuration (`BUILD_WINDOWS_EXAMPLES=OFF`, optional lane): at least 6 tests
+  - Coverage threshold comparison is informational (warnings only, non-gating)
 
 ### Strict warnings failures
 
