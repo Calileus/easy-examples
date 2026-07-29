@@ -106,3 +106,7 @@ For CI/build incident response flow and reproducible diagnostics, see:
 
 - `docs/OPERATIONS_RUNBOOK.md`
 - `docs/TESTING_STRATEGY.md`
+
+For canonical naming and command terminology used across docs, see:
+
+- `docs/TERMINOLOGY.md`

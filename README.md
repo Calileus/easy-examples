@@ -2,6 +2,33 @@
 
 A collection of practical C++ examples demonstrating modern language features, Windows GUI programming, and CMake build system usage. All examples are fully documented with Doxygen-compatible comments.
 
+## Quick Start (Recommended)
+
+Use one of these two flows from repository root.
+
+### Windows (Visual Studio generator)
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --config Debug
+ctest --test-dir build -C Debug --output-on-failure
+```
+
+### Linux/macOS (single-config generator, console examples)
+
+```bash
+cmake -S . -B build_linux -DBUILD_TESTING=ON -DBUILD_WINDOWS_EXAMPLES=OFF
+cmake --build build_linux
+ctest --test-dir build_linux --output-on-failure
+```
+
+Expected baseline:
+
+- Windows root flow discovers at least 7 tests.
+- Linux/macOS console-only flow discovers at least 6 tests.
+
+For naming and command conventions used across docs, see `docs/TERMINOLOGY.md`.
+
 ## Project Structure
 
 ```
@@ -470,6 +497,12 @@ Run tests discovered by CTest:
 ctest --test-dir build -C Debug --output-on-failure
 ```
 
+On single-config generators (for example, Ninja/Makefiles on Linux/macOS):
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
 To disable Win32 GUI examples and build console examples only:
 
 ```bash
@@ -480,24 +513,16 @@ cmake --build build --config Debug
 ### Prerequisites
 
 - **C++ Compiler**: MSVC 2019+, GCC, or Clang with C++11+ support
-- **CMake**: Version 3.10 or higher
+- **CMake**: Version 3.14 or higher
 - **Windows SDK** (for Windows examples)
 - **Google Test** (optional, for GTest integration in PolimorficSmart)
 
 ### Quick Build (All Projects)
 
 ```bash
-# Build all examples
-for /d %i in (*) do (
-    if exist "%i\CMakeLists.txt" (
-        cd "%i"
-        mkdir build 2>nul
-        cd build
-        cmake -S .. -B .
-        cmake --build .
-        cd ../..
-    )
-)
+# Build all examples from root (recommended)
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --config Debug
 ```
 
 ### Generator Options
@@ -664,4 +689,6 @@ See governance and engineering process docs:
 - `docs/ENTERPRISE_READINESS_BASELINE.md`
 - `docs/OPERATIONS_RUNBOOK.md`
 - `docs/TESTING_STRATEGY.md`
+- `docs/TERMINOLOGY.md`
+- `docs/DOCUMENTATION_CONSISTENCY_MATRIX.md`
 - `.github/CODEOWNERS`

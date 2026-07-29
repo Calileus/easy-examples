@@ -45,6 +45,26 @@ PolimorficSmart/
 
 ### Prerequisites
 
+- CMake 3.14+
+- C++17-capable compiler (MSVC, GCC, or Clang)
+- Optional: Google Test for `financial_tests`
+
+### Recommended (Repository Root Workflow)
+
+Run from repository root for the most consistent experience with CI/documentation:
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --config Debug
+ctest --test-dir build -C Debug --output-on-failure
+```
+
+This module contributes these CTest entries in root builds:
+
+- `financial_simple_test`
+- `financial_threaded_test`
+- Optional: `financial_gtest_suite` (when GTest is found)
+
 ### Build Instructions
 
 ```bash
@@ -52,20 +72,20 @@ PolimorficSmart/
 mkdir build
 cd build
 
-# Configure with CMake (MinGW on Windows)
-cmake .. -G "MinGW Makefiles"
+# Configure this module directly
+cmake -S .. -B . -DBUILD_TESTING=ON
 
 # Build the project
 cmake --build .
 
-# Run the example
-./financial_example
+# Run example and tests through custom targets (generator-safe)
+cmake --build . --target run_example
+cmake --build . --target run_simple_tests
+cmake --build . --target run_threaded_example
+cmake --build . --target run_threaded_tests
 
-# Run simple tests (always available)
-./simple_test
-
-# Run GTest tests (if GTest is available)
-./financial_tests
+# Run registered CTest tests
+ctest --output-on-failure
 ```
 
 ### Build Architecture Note
@@ -89,6 +109,12 @@ cmake --build . --target run_tests
 # Run tests with CTest (if GTest is available)
 ctest
 ```
+
+Generator note:
+
+- Multi-config generators (for example Visual Studio) place artifacts under per-config folders.
+- Single-config generators (for example Ninja/Makefiles) place artifacts in the build directory.
+- Prefer custom targets and CTest commands above instead of hardcoding executable paths.
 
 ## Example Usage
 
@@ -123,7 +149,13 @@ The test suite includes:
 
 Run tests with:
 ```bash
-./bin/financial_tests
+ctest --output-on-failure
+```
+
+If GTest is available, run only the optional GTest suite:
+
+```bash
+ctest -R financial_gtest_suite --output-on-failure
 ```
 
 ## Interview Talking Points
