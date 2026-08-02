@@ -14,16 +14,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(BUILD_TESTING)
-    include(FetchContent)
-    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-    set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    FetchContent_Declare(
-        googletest
-        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    )
-    FetchContent_MakeAvailable(googletest)
+    if(NOT TARGET GTest::gtest)
+        include(FetchContent)
+        set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+        set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
+        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+        FetchContent_Declare(
+            googletest
+            URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+            DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        )
+        FetchContent_MakeAvailable(googletest)
+    endif()
     set(GTest_FOUND ON)
 endif()
 
@@ -50,18 +52,14 @@ target_link_libraries(threaded_example PRIVATE financial_core)
 add_executable(threaded_tests threaded_tests.cpp)
 target_link_libraries(threaded_tests PRIVATE financial_core)
 
-if(BUILD_TESTING)
-    add_test(NAME financial_simple_test COMMAND simple_test)
-    add_test(NAME financial_threaded_test COMMAND threaded_tests)
-endif()
-
 # Add test executable (only if GTest is found)
 if(GTest_FOUND)
     add_executable(financial_tests test_financial_instruments.cpp)
     target_link_libraries(financial_tests financial_core GTest::gtest GTest::gtest_main)
 
     if(BUILD_TESTING)
-        add_test(NAME financial_gtest_suite COMMAND financial_tests)
+        include(GoogleTest)
+        gtest_discover_tests(financial_tests)
     endif()
     
     # Custom target to run tests

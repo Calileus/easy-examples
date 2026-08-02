@@ -2,6 +2,19 @@ cmake_minimum_required(VERSION 3.14)
 project(EasyExamples)
 
 include(CTest)
+include(FetchContent)
+
+if(BUILD_TESTING)
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+    set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    FetchContent_MakeAvailable(googletest)
+endif()
 
 option(BUILD_WINDOWS_EXAMPLES "Build Win32 GUI examples" ON)
 option(BUILD_CONSOLE_EXAMPLES "Build console examples" ON)
@@ -67,4 +80,42 @@ if(BUILD_WINDOWS_EXAMPLES)
     else()
         message(STATUS "Skipping Win32 examples because host platform is not Windows")
     endif()
+endif()
+
+if(BUILD_TESTING)
+    add_executable(easyexamples_gtest_migrated_runner
+        tests/gtest_migrated_runner_tests.cpp
+    )
+
+    target_compile_features(easyexamples_gtest_migrated_runner PRIVATE cxx_std_17)
+
+    target_link_libraries(easyexamples_gtest_migrated_runner PRIVATE GTest::gtest_main)
+
+    target_compile_definitions(easyexamples_gtest_migrated_runner PRIVATE
+        EASYEXAMPLES_VSCODE_EASIEST_TEST_PATH="$<TARGET_FILE:vscode_cmake_easiest>"
+        EASYEXAMPLES_VSCODE_W2SRC_TEST_PATH="$<TARGET_FILE:vscode_cmake_w2src>"
+        EASYEXAMPLES_CONTAINERS_TEST_PATH="$<TARGET_FILE:containers_example>"
+        EASYEXAMPLES_EXCEPTION_TEST_PATH="$<TARGET_FILE:exception_example>"
+    )
+
+    if(TARGET simple_test)
+        target_compile_definitions(easyexamples_gtest_migrated_runner PRIVATE
+            EASYEXAMPLES_SIMPLE_TEST_PATH="$<TARGET_FILE:simple_test>"
+        )
+    endif()
+
+    if(TARGET threaded_tests)
+        target_compile_definitions(easyexamples_gtest_migrated_runner PRIVATE
+            EASYEXAMPLES_THREADED_TEST_PATH="$<TARGET_FILE:threaded_tests>"
+        )
+    endif()
+
+    if(TARGET dialog_input_validation_test)
+        target_compile_definitions(easyexamples_gtest_migrated_runner PRIVATE
+            EASYEXAMPLES_DIALOG_INPUT_VALIDATION_TEST_PATH="$<TARGET_FILE:dialog_input_validation_test>"
+        )
+    endif()
+
+    include(GoogleTest)
+    gtest_discover_tests(easyexamples_gtest_migrated_runner)
 endif()

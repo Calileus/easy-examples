@@ -36,7 +36,3 @@ set_target_properties(exception_example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-if(BUILD_TESTING)
-    add_test(NAME exception_handling_smoke
-             COMMAND $<TARGET_FILE:exception_example>)
-endif()

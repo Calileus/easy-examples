@@ -18,11 +18,6 @@ target_link_libraries(dialog_example
     kernel32
     comdlg32)
 
-if(BUILD_TESTING)
-    add_test(NAME windows_dialog_input_validation_test
-             COMMAND $<TARGET_FILE:dialog_input_validation_test>)
-endif()
-
 # Set output directory
 set_target_properties(dialog_example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}

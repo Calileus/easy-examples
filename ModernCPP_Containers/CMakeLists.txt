@@ -37,7 +37,3 @@ set_target_properties(containers_example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-if(BUILD_TESTING)
-    add_test(NAME moderncpp_containers_smoke
-             COMMAND $<TARGET_FILE:containers_example>)
-endif()

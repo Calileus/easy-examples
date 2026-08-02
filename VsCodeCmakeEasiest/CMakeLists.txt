@@ -12,7 +12,3 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Add the executable
 add_executable(vscode_cmake_easiest main.cpp)
 
-if(BUILD_TESTING)
-	add_test(NAME vscode_cmake_easiest_smoke
-			 COMMAND $<TARGET_FILE:vscode_cmake_easiest>)
-endif()

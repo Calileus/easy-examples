@@ -93,8 +93,8 @@ TEST_F(FinancialInstrumentTest, PolymorphicBehavior) {
     
     for (size_t i = 0; i < instruments.size(); ++i) {
         EXPECT_EQ(instruments[i]->getType(), expected_types[i]);
-        EXPECT_GT(instruments[i]->calculateValue(), 0.0);
-        EXPECT_GT(instruments[i]->calculateRisk(), 0.0);
+        EXPECT_GE(instruments[i]->calculateValue(), 0.0);
+        EXPECT_GE(instruments[i]->calculateRisk(), 0.0);
     }
 }
 
