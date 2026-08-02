@@ -5,6 +5,20 @@ on:
   pull_request:
 
 jobs:
+  preset-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (preset)
+        run: cmake --preset ci
+
+      - name: Build (preset)
+        run: cmake --build --preset ci-build
+
+      - name: Test (preset)
+        run: ctest --preset ci-test --output-on-failure
+
   coverage-linux-console:
     runs-on: ubuntu-latest
     continue-on-error: true

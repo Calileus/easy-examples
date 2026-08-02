@@ -6,6 +6,22 @@ A collection of practical C++ examples demonstrating modern language features, W
 
 Use one of these two flows from repository root.
 
+### Canonical presets (portfolio standard)
+
+```bash
+cmake --preset dev
+cmake --build --preset dev-build
+ctest --preset dev-test --output-on-failure
+```
+
+CI baseline:
+
+```bash
+cmake --preset ci
+cmake --build --preset ci-build
+ctest --preset ci-test --output-on-failure
+```
+
 ### Windows (Visual Studio generator)
 
 ```bash
