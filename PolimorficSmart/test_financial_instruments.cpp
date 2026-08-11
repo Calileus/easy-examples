@@ -263,7 +263,7 @@ TEST(EdgeCasesTest, NegativePrices) {
 }
 
 TEST(EdgeCasesTest, LargeNumbers) {
-    auto stock = std::make_unique<Stock>("LARGE", 1e6, 1e6);
+    auto stock = std::make_unique<Stock>("LARGE", 1e6, 1000000);
     
     EXPECT_DOUBLE_EQ(stock->calculateValue(), 1e12);
     EXPECT_DOUBLE_EQ(stock->calculateRisk(), 1.5e11);
