@@ -2,6 +2,10 @@
 
 A collection of practical C++ examples demonstrating modern language features, Windows GUI programming, and CMake build system usage. All examples are fully documented with Doxygen-compatible comments.
 
+## Release v0.0.0
+
+See **[RELEASE_NOTES.md](RELEASE_NOTES.md)** for release notes, platform support matrix, learning path, and contribution guidelines.
+
 ## Quick Start (Recommended)
 
 Use one of these two flows from repository root.

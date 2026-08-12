@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(EasyExamples)
+project(EasyExamples VERSION 0.0.0)
 
 include(CTest)
 include(FetchContent)
