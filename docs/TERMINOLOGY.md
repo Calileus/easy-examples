@@ -25,6 +25,12 @@ Use these exact names in docs and commands:
 - `VsCodeCmakeEasiest`
 - `VsCodeCmakeW2src`
 
+Docker example names:
+
+- `DockerMinimal`
+- `DockerMultiStage`
+- `DockerCompose`
+
 ## Target and Test Naming
 
 - Prefer executable target names from module `CMakeLists.txt` as authoritative.
@@ -37,6 +43,7 @@ Use these exact names in docs and commands:
 - **Console-only build**: Root build with `-DBUILD_WINDOWS_EXAMPLES=OFF`.
 - **Strict warnings build**: Build with `-DEASYEXAMPLES_STRICT_WARNINGS=ON`.
 - **Coverage build**: Build with `-DEASYEXAMPLES_ENABLE_COVERAGE=ON` (GNU/Clang).
+- **Docker example**: An optional folder workflow built with Docker, outside the native CMake graph.
 
 ## Canonical Commands
 

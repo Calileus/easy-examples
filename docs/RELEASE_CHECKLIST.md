@@ -21,6 +21,7 @@
 - [ ] New modules/files are listed where appropriate.
 - [ ] Troubleshooting notes updated if behavior changed.
 - [ ] Terminology/commands align with `docs/TERMINOLOGY.md`.
+- [ ] Docker example READMEs and commands are accurate when Docker examples changed.
 
 ## 4. Repository Hygiene
 
@@ -33,3 +34,4 @@
 - [ ] CODEOWNERS mappings are up to date.
 - [ ] SECURITY policy remains valid.
 - [ ] License text reflects intended distribution policy.
+- [ ] Docker Compose files pass `docker compose config` when applicable.

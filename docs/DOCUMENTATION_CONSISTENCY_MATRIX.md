@@ -10,6 +10,9 @@
 - `docs/TESTING_STRATEGY.md`
 - `docs/ENTERPRISE_READINESS_BASELINE.md`
 - `PolimorficSmart/README.md`
+- `DockerMinimal/README.md`
+- `DockerMultiStage/README.md`
+- `DockerCompose/README.md`
 
 ## Matrix
 
@@ -25,6 +28,8 @@
 | Coverage terminology and optionality | CI `coverage-linux-console` | testing docs, runbook | Aligned | Keep |
 | Module naming (`PolimorficSmart`) | Actual folder name | All docs | Inconsistent aliases in prose | Standardized via terminology doc |
 | Build instructions for all modules | Root build is preferred | `README.md` | Previously mixed/confusing quick-build loop | Replaced with root canonical commands |
+| Docker examples are optional and outside CMake | Docker folder Dockerfiles | Root README, release notes, testing docs, Docker READMEs | Newly introduced | Keep Docker commands documented per folder |
+| Docker workflow names | Docker folder names and `compose.yaml` | Root README, release notes | Aligned | Keep `DockerMinimal`, `DockerMultiStage`, and `DockerCompose` |
 
 ## Contradictions Found and Resolved
 

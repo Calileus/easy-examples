@@ -6,6 +6,7 @@ Thanks for helping improve EasyExamples.
 
 - CMake 3.14+
 - A C++ compiler with C++17 support (MSVC 2019+ recommended on Windows)
+- Docker Engine and Docker Compose (only when changing Docker examples)
 
 ## Local Build
 
@@ -83,7 +84,7 @@ cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNING
 2. Prefer built-in platform/library features over adding dependencies.
 3. Preserve existing behavior unless the change explicitly targets behavior.
 4. Add or update tests when changing logic.
-5. Update README or module docs when setup/build steps change.
+5. Update README or module docs when setup/build steps change. Docker examples should also update their folder README when commands or image behavior changes.
 
 ## Coding Standards
 
@@ -98,6 +99,8 @@ cmake -S . -B build_strict_root -DBUILD_TESTING=ON -DEASYEXAMPLES_STRICT_WARNING
 - [ ] `ctest` passes in at least one configuration.
 - [ ] `ctest -N` from root reports at least 7 discovered tests.
 - [ ] Documentation updated if needed.
+
+Docker example changes should additionally be checked with `docker compose config` for Compose files and a build/run smoke test for the affected image when Docker is available.
 - [ ] No unrelated generated artifacts committed.
 
 ## Troubleshooting

@@ -4,7 +4,7 @@
 
 This assessment is based on direct inspection of the repository source code, CMake files, CI workflow, and documentation.
 
-- Source modules inspected: all 12 example modules in repository root
+- Native source modules inspected: all 12 CMake example modules in repository root; three optional Docker workflow folders are documented separately.
 - Build system inspected: root `CMakeLists.txt` plus all module `CMakeLists.txt`
 - CI/CD inspected: `.github/workflows/ci.yml`
 - Governance/docs inspected: `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `docs/RELEASE_CHECKLIST.md`

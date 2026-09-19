@@ -16,6 +16,9 @@ Current smoke coverage:
 - `vscode_cmake_w2src_smoke`
 - `moderncpp_containers_smoke`
 - `exception_handling_smoke`
+- `docker_examples_have_required_files` (manifest smoke check; does not require Docker)
+
+Docker runtime smoke tests are optional local checks because the native CI lanes do not require Docker. For Docker changes, run the affected `docker build` and `docker run` commands locally; for `DockerCompose`, also run `docker compose config` and `docker compose up --build`.
 
 ### 2) Functional/Behavioral Tests
 
@@ -49,6 +52,7 @@ Current strict jobs:
 
 - Minimum discovered tests: **7**
 - Required checks: configure, build (Debug/Release), discovery gate, test execution
+- Docker examples are not part of this CMake pipeline.
 
 ### Linux console-only pipeline (`BUILD_WINDOWS_EXAMPLES=OFF`)
 
@@ -110,6 +114,7 @@ A change is considered test-acceptable when:
 2. Root discovery threshold is preserved (7 Windows, 6 console-only).
 3. No strict-warning regressions are introduced in guarded modules.
 4. New deterministic logic introduced in non-trivial code paths includes a test where practical.
+5. Docker example changes pass their documented image/runtime checks when Docker is available.
 
 ## Roadmap (Testing)
 

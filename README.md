@@ -1,6 +1,6 @@
 # Easy C++ Examples
 
-A collection of practical C++ examples demonstrating modern language features, Windows GUI programming, and CMake build system usage. All examples are fully documented with Doxygen-compatible comments.
+A collection of practical C++ examples demonstrating modern language features, Windows GUI programming, CMake build system usage, and beginner Docker workflows. All examples are fully documented with Doxygen-compatible comments.
 
 ## Release v0.0.0
 
@@ -65,6 +65,9 @@ EasyExamples/
 ├── ResourcesProgressBar/         # Progress bar control example
 ├── VsCodeCmakeEasiest/           # Minimal CMake project
 ├── VsCodeCmakeW2src/             # Multi-file CMake project
+├── DockerMinimal/                # Minimal Docker build and run workflow
+├── DockerMultiStage/             # Multi-stage Docker image workflow
+├── DockerCompose/                # Docker Compose configuration workflow
 └── README.md                     # This file
 ```
 
@@ -86,6 +89,14 @@ Here the examples are ordered from easiest to most advanced:
 10. `ResourcesProgressBar`
 11. `WindowsDrawing`
 12. `PolimorficSmart`
+
+Docker workflows are independent of the native CMake build and are ordered from simplest to most involved:
+
+1. `DockerMinimal`
+2. `DockerMultiStage`
+3. `DockerCompose`
+
+They require Docker Engine; Docker Desktop provides Docker Engine and Docker Compose on Windows and macOS.
 
 ## Examples Summary
 
@@ -530,12 +541,24 @@ cmake -S . -B build -DBUILD_WINDOWS_EXAMPLES=OFF
 cmake --build build --config Debug
 ```
 
+### Docker Examples
+
+The Docker examples are small, runnable workflows for packaging console C++ programs. Each folder contains its own `Dockerfile`, source file, and README, and remains outside the CMake graph so native builds do not require Docker.
+
+```bash
+docker build -t easyexamples-docker-minimal ./DockerMinimal
+docker run --rm easyexamples-docker-minimal
+docker compose -f DockerCompose/compose.yaml up --build --remove-orphans
+docker compose -f DockerCompose/compose.yaml down
+```
+
 ### Prerequisites
 
 - **C++ Compiler**: MSVC 2019+, GCC, or Clang with C++11+ support
 - **CMake**: Version 3.14 or higher
 - **Windows SDK** (for Windows examples)
 - **Google Test** (optional, for GTest integration in PolimorficSmart)
+- **Docker Engine** (optional, for the Docker examples)
 
 ### Quick Build (All Projects)
 

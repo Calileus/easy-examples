@@ -1,0 +1,5 @@
+services:
+  greeting:
+    build: .
+    environment:
+      EASYEXAMPLES_GREETING: "Hello from a Docker Compose service."

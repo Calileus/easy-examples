@@ -37,6 +37,10 @@ Provide a repeatable procedure for diagnosing and resolving build and test failu
    - runtime test failure
 6. Apply a minimal fix and rerun local build + tests before pushing.
 
+### Docker example checks
+
+Docker examples are optional and are not included in the CMake CI matrix. For a Docker change, run the affected folder's documented build/run commands. Run `docker compose config` before starting `DockerCompose`, and use `docker compose up --build --remove-orphans` followed by `docker compose down` for its runtime check.
+
 ## Reproduction Commands
 
 ### Root build and tests

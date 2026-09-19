@@ -97,6 +97,7 @@ if(BUILD_TESTING)
         EASYEXAMPLES_VSCODE_W2SRC_TEST_PATH="$<TARGET_FILE:vscode_cmake_w2src>"
         EASYEXAMPLES_CONTAINERS_TEST_PATH="$<TARGET_FILE:containers_example>"
         EASYEXAMPLES_EXCEPTION_TEST_PATH="$<TARGET_FILE:exception_example>"
+        EASYEXAMPLES_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
     )
 
     if(TARGET simple_test)

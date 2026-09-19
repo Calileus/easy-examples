@@ -63,6 +63,29 @@ TEST(EasyExamplesMigratedTests, ExceptionHandlingSmoke)
     EXPECT_EQ(0, rc);
 }
 
+TEST(EasyExamplesMigratedTests, DockerExamplesHaveRequiredFiles)
+{
+    const std::string source_dir = EASYEXAMPLES_SOURCE_DIR;
+    const std::string required_files[] = {
+        source_dir + "/DockerMinimal/main.cpp",
+        source_dir + "/DockerMinimal/Dockerfile",
+        source_dir + "/DockerMultiStage/main.cpp",
+        source_dir + "/DockerMultiStage/Dockerfile",
+        source_dir + "/DockerCompose/main.cpp",
+        source_dir + "/DockerCompose/Dockerfile",
+        source_dir + "/DockerCompose/compose.yaml",
+        source_dir + "/DockerMinimal/README.md",
+        source_dir + "/DockerMultiStage/README.md",
+        source_dir + "/DockerCompose/README.md",
+    };
+
+    for (const std::string& path : required_files)
+    {
+        std::ifstream file(path, std::ios::binary);
+        ASSERT_TRUE(file.good()) << "Required Docker example file is missing: " << path;
+    }
+}
+
 #ifdef EASYEXAMPLES_SIMPLE_TEST_PATH
 TEST(EasyExamplesMigratedTests, PolimorficSimple)
 {

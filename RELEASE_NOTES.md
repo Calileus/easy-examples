@@ -6,11 +6,11 @@
 
 ## Overview
 
-**easy-examples** is a comprehensive collection of 12 progressive C++ learning examples demonstrating modern language features, Windows GUI programming, CMake build system usage, and design patterns. Ordered from beginner to advanced.
+**easy-examples** is a comprehensive collection of 15 progressive C++ learning examples demonstrating modern language features, Windows GUI programming, CMake build system usage, design patterns, and Docker workflows. Ordered from beginner to advanced.
 
 ## What's Included in This Release (V0.0.0)
 
-### Learning Examples (12 Total)
+### Learning Examples (15 Total)
 
 **Difficulty 1-2 (Beginner - CMake Basics)**
 1. **VsCodeCmakeEasiest** - Minimal single-file CMake project
@@ -32,11 +32,17 @@
 11. **WindowsDrawing** - Graphics drawing and mouse interaction
 12. **PolimorficSmart** - Smart pointers, polymorphism, design patterns
 
+**Docker workflows (optional, outside the CMake build):**
+13. **DockerMinimal** - Build and run a one-file C++ program in Docker
+14. **DockerMultiStage** - Separate compilation and runtime image stages
+15. **DockerCompose** - Configure and run a C++ service with Compose
+
 ### Framework Features
 - **CMake Build System**: Cross-platform build configuration
 - **Doxygen Documentation**: All examples documented with comments
 - **Test Harness**: Unit tests included
 - **Multiple Compilers**: MSVC, GCC, Clang support
+- **Docker Workflows**: Minimal image, multi-stage image, and Compose examples
 
 ## System Requirements
 
@@ -60,7 +66,7 @@
 
 ## Quick Start
 
-### Windows (All 12 Examples)
+### Windows (All native examples)
 
 ```bash
 # Configure with Visual Studio generator
@@ -73,7 +79,7 @@ cmake --build build --config Debug
 ctest --test-dir build -C Debug --output-on-failure
 ```
 
-Expected: At least 7 tests discovered and passing
+Expected: At least 7 native tests discovered and passing. Docker examples are validated separately and require Docker Engine to run.
 
 ### Linux/macOS (Console-Only, 5 Examples)
 
@@ -114,6 +120,9 @@ ctest --preset dev-test --output-on-failure
 | ResourcesProgressBar | ✅ | ❌ | ❌ |
 | WindowsDrawing | ✅ | ❌ | ❌ |
 | PolimorficSmart | ✅ | ✅ | ✅ |
+| DockerMinimal | Docker | Docker | Docker |
+| DockerMultiStage | Docker | Docker | Docker |
+| DockerCompose | Docker | Docker | Docker |
 
 ## Example Descriptions
 
@@ -250,7 +259,7 @@ See CONTRIBUTING.md for:
 ## Release History
 
 - **v0.0.0** (2026-08-12): Initial release
-  - 12 examples: ✅ Complete
+  - 15 examples/workflows: ✅ Complete (12 native CMake examples + 3 Docker workflows)
   - Windows support: ✅ Full (7 GUI + 5 console)
   - Linux/macOS support: ✅ Console-only (5 examples)
   - Documentation: ✅ Comprehensive
